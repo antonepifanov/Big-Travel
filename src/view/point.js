@@ -1,11 +1,15 @@
-export const createPointTemplate = () => (
-  `<li class="trip-events__item">
+import {generatePoint} from '../mock/point.js';
+
+export const createPointTemplate = () => {
+  const point = generatePoint();
+
+  return `<li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="2019-03-18">MAR 18</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/drive.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">Drive Chamonix</h3>
+    <h3 class="event__title">${point.type} ${point.destination}</h3>
     <div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime="2019-03-18T14:30">14:30</time>
@@ -35,5 +39,5 @@ export const createPointTemplate = () => (
       <span class="visually-hidden">Open event</span>
     </button>
   </div>
-</li>`
-);
+</li>`;
+};
