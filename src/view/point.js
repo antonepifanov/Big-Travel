@@ -3,6 +3,8 @@ import {generatePoint} from '../mock/point.js';
 export const createPointTemplate = () => {
   const point = generatePoint();
 
+  console.log(point);
+
   return `<li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="2019-03-18">MAR 18</time>
