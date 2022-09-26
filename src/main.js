@@ -11,8 +11,6 @@ import {createPointTemplate} from './view/point.js';
 import {MOCK_EVENTS} from './mock/constants';
 import {generatePoint} from './mock/point';
 
-const POINT_COUNT = 3;
-
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -38,9 +36,9 @@ const pointsList = mainContent.querySelector('.trip-events__list');
 render(pointsList, createEditPointTemplate(), 'afterbegin');
 render(pointsList, createNewPointTemplate(), 'beforeend');
 
-for (let i = 0; i < POINT_COUNT; i++) {
-  render(pointsList, createPointTemplate(), 'beforeend');
-}
-
 const mockData = Array.from({length: getRandomInteger(MOCK_EVENTS.MIN, MOCK_EVENTS.MAX)}, () => generatePoint());
 console.log(mockData);
+
+mockData.forEach((mockEvent) => {
+  render(pointsList, createPointTemplate(mockEvent), 'beforeend');
+});
