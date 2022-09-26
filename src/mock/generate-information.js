@@ -17,14 +17,14 @@ const getDescription = () => {
 const getPhotos = () => {
   const photos = [];
   const getPhoto = () => {
-    let photo = `http://placebeard.it/248/152?r=${getRandomInteger(PHOTOS_RANGE.min, PHOTOS_RANGE.max)}`;
+    let photo = `http://placebeard.it/248/152?r=${getRandomInteger(PHOTOS_RANGE.MIN, PHOTOS_RANGE.MAX)}`;
     while (photos.includes(photo)) {
-      photo = `http://placebeard.it/248/152?r=${getRandomInteger(PHOTOS_RANGE.min, PHOTOS_RANGE.max)}`;
+      photo = `http://placebeard.it/248/152?r=${getRandomInteger(PHOTOS_RANGE.MIN, PHOTOS_RANGE.MAX)}`;
     }
     photos.push(photo);
     return photo;
   };
-  return Array.from({length: getRandomInteger(PHOTOS_COUNT.min, PHOTOS_COUNT.max)}, () => getPhoto());
+  return Array.from({length: getRandomInteger(PHOTOS_COUNT.MIN, PHOTOS_COUNT.MAX)}, () => getPhoto());
 };
 
 export const generateInformation = () => ({

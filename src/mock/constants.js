@@ -18,8 +18,8 @@ export const DESTINATIONS = [
 ];
 
 export const OFFERS_COUNT = {
-  min: 0,
-  max: 5,
+  MIN: 0,
+  MAX: 5,
 };
 
 export const TITLES_OF_OFFERS = [
@@ -32,8 +32,8 @@ export const TITLES_OF_OFFERS = [
 ];
 
 export const PRICE = {
-  min: 10,
-  max: 200,
+  MIN: 10,
+  MAX: 200,
 };
 
 export const DESCRIPTIONS = [
@@ -51,16 +51,28 @@ export const DESCRIPTIONS = [
 ];
 
 export const SENTENCES_COUNT = {
-  min: 1,
-  max: 5,
+  MIN: 1,
+  MAX: 5,
 };
 
 export const PHOTOS_COUNT = {
-  min: 1,
-  max: 3,
+  MIN: 1,
+  MAX: 3,
 };
 
 export const PHOTOS_RANGE = {
-  min: 1,
-  max: 100,
+  MIN: 1,
+  MAX: 100,
+};
+
+export const DATE_GAPS = {
+  DAY_GAP: 3,
+  HOUR_GAP: 23,
+  MINUTE_GAP: 59,
+  MIN_MINUTE_GAP: 10,
+};
+
+export const MOCK_EVENTS = {
+  MIN: 15,
+  MAX:20,
 };

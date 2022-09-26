@@ -11,13 +11,13 @@ const generateSetOfOffers = () => TYPES_OF_POINT.map((typeOfPoint) => {
     titles.push(title);
     return {
       title,
-      price: getRandomInteger(PRICE.min, PRICE.max),
+      price: getRandomInteger(PRICE.MIN, PRICE.MAX),
     };
   };
 
   return {
     type: typeOfPoint,
-    offers: Array.from({length: getRandomInteger(OFFERS_COUNT.min, OFFERS_COUNT.max)}, () => getOffer()),
+    offers: Array.from({length: getRandomInteger(OFFERS_COUNT.MIN, OFFERS_COUNT.MAX)}, () => getOffer()),
   };
 });
 

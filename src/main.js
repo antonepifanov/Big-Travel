@@ -1,3 +1,4 @@
+import {getRandomInteger} from './util/get-random-integer';
 import {createTripInfoTemplate} from './view/trip-info.js';
 import {createMenuTemplate} from './view/menu.js';
 import {createTripCoastTemplate} from './view/trip-coast.js';
@@ -7,6 +8,8 @@ import {createPointsListTemplate} from './view/points-list.js';
 import {createEditPointTemplate} from './view/edit-point.js';
 import {createNewPointTemplate} from './view/new-point.js';
 import {createPointTemplate} from './view/point.js';
+import {MOCK_EVENTS} from './mock/constants';
+import {generatePoint} from './mock/point';
 
 const POINT_COUNT = 3;
 
@@ -38,3 +41,6 @@ render(pointsList, createNewPointTemplate(), 'beforeend');
 for (let i = 0; i < POINT_COUNT; i++) {
   render(pointsList, createPointTemplate(), 'beforeend');
 }
+
+const mockData = Array.from({length: getRandomInteger(MOCK_EVENTS.MIN, MOCK_EVENTS.MAX)}, () => generatePoint());
+console.log(mockData);
