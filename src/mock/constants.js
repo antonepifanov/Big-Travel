@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 export const TYPES_OF_POINT = [
   'Taxi',
   'Bus',
@@ -68,7 +66,7 @@ export const PHOTOS_RANGE = {
 };
 
 export const DATE_GAPS = {
-  DAY_GAP: 3,
+  DAY_GAP: 2,
   HOUR_GAP: 23,
   MINUTE_GAP: 59,
   MIN_MINUTE_GAP: 10,
@@ -83,12 +81,4 @@ export const TIME_FORMATS = {
   DATETIME: 'YYYY-MM-DDTHH:mm',
   EVENT_DATE: 'MMM DD',
   START_TIME: 'HH:mm',
-  DURATION: (dateFrom, dateTo) => {
-    const wholeDays = dayjs(dateFrom).diff(dateTo, 'day');
-    const wholeHours = dayjs(dateFrom).diff(dateTo, 'hour');
-
-    if (wholeDays > 0) {
-      return 'DD[D} HH[H] MM[M]';
-    }
-  },
 };

@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import {TIME_FORMATS} from '../mock/constants';
+import {getDuration} from '../util/get-duration';
 
 export const createPointTemplate = (point) => {
   const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = point;
 
+  const tripDuration = getDuration(dateFrom, dateTo);
   const favoriteStatus = isFavorite
     ? 'event__favorite-btn--active'
     : '';
@@ -21,7 +23,7 @@ export const createPointTemplate = (point) => {
         &mdash;
         <time class="event__end-time" datetime="${dayjs(dateTo).format(TIME_FORMATS.DATETIME)}">${dayjs(dateTo).format(TIME_FORMATS.START_TIME)}</time>
       </p>
-      <p class="event__duration"></p>
+      <p class="event__duration">${tripDuration}</p>
     </div>
     <p class="event__price">
       &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
