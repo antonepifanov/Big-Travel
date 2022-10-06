@@ -12,6 +12,7 @@ const generateSetOfOffers = () => TYPES_OF_POINT.map((typeOfPoint) => {
     return {
       title,
       price: getRandomInteger(PRICE.MIN, PRICE.MAX),
+      isSelected: Boolean(getRandomInteger(0, 1)),
     };
   };
 
@@ -23,6 +24,6 @@ const generateSetOfOffers = () => TYPES_OF_POINT.map((typeOfPoint) => {
 
 const setOfOffers = generateSetOfOffers();
 
-export const generateOffers = (type) => setOfOffers.find((offers) => (
-  offers.type === type
-)).offers;
+export const generateOffers = (type) => setOfOffers.find((offer) => (
+  offer.type === type
+));

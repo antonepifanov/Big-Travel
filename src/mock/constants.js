@@ -1,3 +1,8 @@
+export const ID_COUNT = {
+  MIN: 1,
+  MAX: 100,
+};
+
 export const TYPES_OF_POINT = [
   'Taxi',
   'Bus',
@@ -81,4 +86,5 @@ export const TIME_FORMATS = {
   DATETIME: 'YYYY-MM-DDTHH:mm',
   EVENT_DATE: 'MMM DD',
   START_TIME: 'HH:mm',
+  FORM_TIME: 'DD/MM/YY HH:mm',
 };

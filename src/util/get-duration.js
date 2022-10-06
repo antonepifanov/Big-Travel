@@ -8,10 +8,11 @@ export const getDuration = (dateFrom, dateTo) => {
   const wholeDays = dayjs(dateTo).diff(dayjs(dateFrom), 'day');
   const wholeHours = dayjs(dateTo).diff(dayjs(dateFrom), 'hour');
 
-  // eslint-disable-next-line no-nested-ternary
-  wholeDays > 0
-    ? tripDuration.format('DD[D] HH[H] mm[M]')
-    : wholeHours > 0
-      ? tripDuration.format('HH[H] mm[M]')
-      : tripDuration.format('mm[M]');
+  if (wholeDays > 0) {
+    return tripDuration.format('DD[D] HH[H] mm[M]');
+  } else if (wholeHours > 0) {
+    return tripDuration.format('HH[H] mm[M]');
+  } else {
+    return tripDuration.format('mm[M]');
+  }
 };

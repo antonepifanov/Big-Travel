@@ -33,11 +33,12 @@ render(mainContent, createSortingTemplate(), 'beforeend');
 render(mainContent, createPointsListTemplate(), 'beforeend');
 
 const pointsList = mainContent.querySelector('.trip-events__list');
-render(pointsList, createEditPointTemplate(), 'afterbegin');
 render(pointsList, createNewPointTemplate(), 'beforeend');
 
 const mockData = Array.from({length: getRandomInteger(MOCK_EVENTS.MIN, MOCK_EVENTS.MAX)}, () => generatePoint());
 
-mockData.forEach((mockEvent) => {
+render(pointsList, createEditPointTemplate(mockData[0]), 'afterbegin');
+
+mockData.slice(1).forEach((mockEvent) => {
   render(pointsList, createPointTemplate(mockEvent), 'beforeend');
 });
