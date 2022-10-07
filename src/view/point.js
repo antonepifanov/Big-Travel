@@ -24,8 +24,6 @@ const getSelectedOffersTemplate = (offer) => {
 
 export const createPointTemplate = (point) => {
   const {type, destination, dateFrom, dateTo, basePrice, offer, isFavorite} = point;
-  const tripDuration = getDuration(dateFrom, dateTo);
-  const selectedOffersTemplate = getSelectedOffersTemplate(offer);
 
   return `<li class="trip-events__item">
             <div class="event">
@@ -40,12 +38,12 @@ export const createPointTemplate = (point) => {
                   &mdash;
                   <time class="event__end-time" datetime="${dayjs(dateTo).format(TIME_FORMATS.DATETIME)}">${dayjs(dateTo).format(TIME_FORMATS.START_TIME)}</time>
                 </p>
-                <p class="event__duration">${tripDuration}</p>
+                <p class="event__duration">${getDuration(dateFrom, dateTo)}</p>
               </div>
               <p class="event__price">
                 &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
               </p>
-              ${selectedOffersTemplate}
+              ${getSelectedOffersTemplate(offer)}
               <button class="event__favorite-btn  ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
                 <span class="visually-hidden">Add to favorite</span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

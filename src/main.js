@@ -6,10 +6,9 @@ import {createFiltersTemplate} from './view/trip-filters.js';
 import {createSortingTemplate} from './view/sorting.js';
 import {createPointsListTemplate} from './view/points-list.js';
 import {createEditPointTemplate} from './view/edit-point.js';
-import {createNewPointTemplate} from './view/new-point.js';
 import {createPointTemplate} from './view/point.js';
 import {MOCK_EVENTS} from './mock/constants.js';
-import {generatePoint} from './mock/point.js';
+import {generatePoint} from './mock/generate-point.js';
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -33,7 +32,6 @@ render(mainContent, createSortingTemplate(), 'beforeend');
 render(mainContent, createPointsListTemplate(), 'beforeend');
 
 const pointsList = mainContent.querySelector('.trip-events__list');
-render(pointsList, createNewPointTemplate(), 'beforeend');
 
 const mockData = Array.from({length: getRandomInteger(MOCK_EVENTS.MIN, MOCK_EVENTS.MAX)}, () => generatePoint());
 
