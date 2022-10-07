@@ -1,12 +1,13 @@
 import {getRandomInteger} from '../util/get-random-integer.js';
+import {getRandomData} from '../util/get-random-data.js';
 import {DESCRIPTIONS, SENTENCES_COUNT, PHOTOS_COUNT, PHOTOS_RANGE} from './constants.js';
 
 const getDescription = () => {
   const sentences = [];
   const getSentence = () => {
-    let sentence = DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)];
+    let sentence = getRandomData(DESCRIPTIONS);
     while (sentences.includes(sentence)) {
-      sentence = DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)];
+      sentence = getRandomData(DESCRIPTIONS);
     }
     sentences.push(sentence);
     return sentence;

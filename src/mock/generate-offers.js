@@ -1,12 +1,13 @@
 import {getRandomInteger} from '../util/get-random-integer';
+import {getRandomData} from '../util/get-random-data';
 import {OFFERS_COUNT, TITLES_OF_OFFERS, PRICE, TYPES_OF_POINT} from './constants';
 
 const generateSetOfOffers = () => TYPES_OF_POINT.map((typeOfPoint) => {
   const titles = [];
   const getOffer = () => {
-    let title = TITLES_OF_OFFERS[getRandomInteger(0, TITLES_OF_OFFERS.length - 1)];
+    let title = getRandomData(TITLES_OF_OFFERS);
     while (titles.includes(title)) {
-      title = TITLES_OF_OFFERS[getRandomInteger(0, TITLES_OF_OFFERS.length - 1)];
+      title = getRandomData(TITLES_OF_OFFERS);
     }
     titles.push(title);
     return {
