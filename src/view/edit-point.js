@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import {getFormattedDate} from '../util/get-formatted-date.js';
 import {TYPES_OF_POINT, DESTINATIONS, TIME_FORMATS} from '../mock/constants.js';
 import {getId} from '../mock/generate-id.js';
 
@@ -114,10 +114,10 @@ export const createEditPointTemplate = (point = {}) => {
 
                 <div class="event__field-group  event__field-group--time">
                   <label class="visually-hidden" for="event-start-time-${id}">From</label>
-                  <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${dateFrom !== null ? dayjs(dateFrom).format(TIME_FORMATS.FORM_TIME) : ''}">
+                  <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${dateFrom !== null ? getFormattedDate(dateFrom, TIME_FORMATS.FORM_TIME) : ''}">
                   &mdash;
                   <label class="visually-hidden" for="event-end-time-${id}">To</label>
-                  <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${dateTo !== null ? dayjs(dateTo).format(TIME_FORMATS.FORM_TIME) : ''}">
+                  <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${dateTo !== null ? getFormattedDate(dateTo, TIME_FORMATS.FORM_TIME) : ''}">
                 </div>
 
                 <div class="event__field-group  event__field-group--price">

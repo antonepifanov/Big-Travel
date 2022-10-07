@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import {getFormattedDate} from '../util/get-formatted-date.js';
 import {TIME_FORMATS} from '../mock/constants';
 import {getDuration} from '../util/get-duration';
 
@@ -27,16 +27,16 @@ export const createPointTemplate = (point) => {
 
   return `<li class="trip-events__item">
             <div class="event">
-              <time class="event__date" datetime="${dayjs(dateFrom).format(TIME_FORMATS.DATETIME)}">${dayjs(dateFrom).format(TIME_FORMATS.EVENT_DATE)}</time>
+              <time class="event__date" datetime="${getFormattedDate(dateFrom, TIME_FORMATS.DATETIME)}">${getFormattedDate(dateFrom, TIME_FORMATS.EVENT_DATE)}</time>
               <div class="event__type">
                 <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event icon">
               </div>
               <h3 class="event__title">${type} ${destination}</h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="${dayjs(dateFrom).format(TIME_FORMATS.DATETIME)}">${dayjs(dateFrom).format(TIME_FORMATS.START_TIME)}</time>
+                  <time class="event__start-time" datetime="${getFormattedDate(dateFrom, TIME_FORMATS.DATETIME)}">${getFormattedDate(dateFrom, TIME_FORMATS.START_TIME)}</time>
                   &mdash;
-                  <time class="event__end-time" datetime="${dayjs(dateTo).format(TIME_FORMATS.DATETIME)}">${dayjs(dateTo).format(TIME_FORMATS.START_TIME)}</time>
+                  <time class="event__end-time" datetime="${getFormattedDate(dateTo, TIME_FORMATS.DATETIME)}">${getFormattedDate(dateTo, TIME_FORMATS.START_TIME)}</time>
                 </p>
                 <p class="event__duration">${getDuration(dateFrom, dateTo)}</p>
               </div>
