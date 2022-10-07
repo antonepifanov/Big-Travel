@@ -8,6 +8,7 @@ import {createPointsListTemplate} from './view/points-list.js';
 import {createEditPointTemplate} from './view/edit-point.js';
 import {createPointTemplate} from './view/point.js';
 import {generateFilters} from './mock/generate-filters.js';
+import {generateSorting} from './mock/generate-sorting.js';
 import {MOCK_EVENTS} from './mock/constants.js';
 import {generatePoint} from './mock/generate-point.js';
 
@@ -17,7 +18,9 @@ const render = (container, template, place) => {
 
 const mockPoints = Array.from({length: getRandomInteger(MOCK_EVENTS.MIN, MOCK_EVENTS.MAX)}, () => generatePoint());
 const filters = generateFilters(mockPoints);
+const sorting = generateSorting(mockPoints);
 
+console.log(sorting);
 const tripMain = document.querySelector('.trip-main');
 render(tripMain, createTripInfoTemplate(), 'afterbegin');
 
@@ -31,7 +34,7 @@ const tripFilters = tripMain.querySelector('.trip-controls__filters');
 render(tripFilters, createFilterTemplate(filters), 'beforeend');
 
 const mainContent = document.querySelector('.trip-events');
-render(mainContent, createSortingTemplate(), 'beforeend');
+render(mainContent, createSortingTemplate(sorting), 'beforeend');
 
 render(mainContent, createPointsListTemplate(), 'beforeend');
 

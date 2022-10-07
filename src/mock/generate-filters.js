@@ -11,6 +11,6 @@ const toFilterMap = {
 export const generateFilters = (mockPoints) => (
   Object.entries(toFilterMap).map(([filterName, arrayOfPoints]) => ({
     name: filterName,
-    count: arrayOfPoints(mockPoints),
+    filteredPoints: arrayOfPoints(mockPoints),
   }))
 );

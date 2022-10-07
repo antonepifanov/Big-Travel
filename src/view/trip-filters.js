@@ -1,5 +1,5 @@
-export const createFilterTemplate = (filterItems) => {
-  const filterItemsTemplate = filterItems.map((filter, index) => (
+export const createFilterTemplate = (filters) => {
+  const filterItemsTemplate = filters.map((filter, index) => (
     `<div class="trip-filters__filter">
       <input id="filter-${filter.name.toLowerCase()}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter.name.toLowerCase()}" ${index === 0 ? 'checked' : ''}>
       <label class="trip-filters__filter-label" for="filter-${filter.name.toLowerCase()}">${filter.name}</label>
