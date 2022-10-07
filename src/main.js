@@ -20,7 +20,6 @@ const mockPoints = Array.from({length: getRandomInteger(MOCK_EVENTS.MIN, MOCK_EV
 const filters = generateFilters(mockPoints);
 const sorting = generateSorting(mockPoints);
 
-console.log(sorting);
 const tripMain = document.querySelector('.trip-main');
 render(tripMain, createTripInfoTemplate(), 'afterbegin');
 
