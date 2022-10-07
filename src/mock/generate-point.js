@@ -1,7 +1,6 @@
 
 import {TYPES_OF_POINT, DESTINATIONS, PRICE} from './constants.js';
-import {getRandomInteger} from '../util/get-random-integer.js';
-import {getRandomData} from '../util/get-random-data.js';
+import {getRandomInteger, getRandomData} from '../utilities.js';
 import {getId} from './generate-id.js';
 import {generateOffers} from './generate-offers.js';
 import {generateInformation} from './generate-information.js';

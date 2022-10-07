@@ -1,5 +1,4 @@
-import {getRandomInteger} from '../util/get-random-integer';
-import {getRandomData} from '../util/get-random-data';
+import {getRandomInteger, getRandomData} from '../utilities.js';
 import {OFFERS_COUNT, TITLES_OF_OFFERS, PRICE, TYPES_OF_POINT} from './constants';
 
 const generateSetOfOffers = () => TYPES_OF_POINT.map((typeOfPoint) => {

@@ -62,7 +62,7 @@ export const SENTENCES_COUNT = {
 
 export const PHOTOS_COUNT = {
   MIN: 1,
-  MAX: 3,
+  MAX: 5,
 };
 
 export const PHOTOS_RANGE = {
@@ -88,3 +88,5 @@ export const TIME_FORMATS = {
   START_TIME: 'HH:mm',
   FORM_TIME: 'DD/MM/YY HH:mm',
 };
+
+export const PHOTO_URL = 'http://loremflickr.com/248/152?r=';

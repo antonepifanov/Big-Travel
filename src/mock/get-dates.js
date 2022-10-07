@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../util/get-random-integer';
+import {getRandomInteger} from '../utilities.js';
 import {DATE_GAPS} from './constants';
 
 export const getDates = () => {

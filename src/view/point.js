@@ -1,18 +1,19 @@
-import {getFormattedDate} from '../util/get-formatted-date.js';
-import {TIME_FORMATS} from '../mock/constants';
-import {getDuration} from '../util/get-duration';
+import {TIME_FORMATS} from '../mock/constants.js';
+import {getDuration, getFormattedDate} from '../utilities.js';
 
 const getSelectedOffersTemplate = (offer) => {
   const offers = offer.offers;
   const selectedOffers = offers.filter((offerItem) => offerItem.isSelected);
 
-  const getSelectedOffers = () => selectedOffers.map(({title, price}) => (
-    `<li class="event__offer">
-      <span class="event__offer-title">${title}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${price}</span>
-    </li>`
-  )).join(' ');
+  const getSelectedOffers = () => (
+    selectedOffers.map(({title, price}) => (
+      `<li class="event__offer">
+        <span class="event__offer-title">${title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${price}</span>
+      </li>`
+    )).join(' ')
+  );
 
   return selectedOffers.length > 0
     ? `<h4 class="visually-hidden">Offers:</h4>

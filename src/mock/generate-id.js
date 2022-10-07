@@ -1,4 +1,4 @@
-import {getRandomInteger} from '../util/get-random-integer.js';
+import {getRandomInteger} from '../utilities.js';
 import {ID_COUNT} from './constants.js';
 
 const generateIdOfPoint = () => {
