@@ -1,51 +1,58 @@
 import {TIME_FORMATS} from '../mock/constants.js';
 import {getDuration, getFormattedDate} from '../utilities.js';
 
-const getSelectedOffersTemplate = (offer) => {
-  const offers = offer.offers;
-  const selectedOffers = offers.filter((offerItem) => offerItem.isSelected);
+const getSelectedOffers = (selectedOffers) => (
+  selectedOffers.map(({title, price}) => (
+    `<li class="event__offer">
+      <span class="event__offer-title">${title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${price}</span>
+    </li>`
+  )).join(' ')
+);
 
-  const getSelectedOffers = () => (
-    selectedOffers.map(({title, price}) => (
-      `<li class="event__offer">
-        <span class="event__offer-title">${title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${price}</span>
-      </li>`
-    )).join(' ')
-  );
+const getSelectedOffersTemplate = ({offers}) => {
+  const selectedOffersArray = offers.filter((offerItem) => offerItem.isSelected);
+  const selectedOffer = getSelectedOffers(selectedOffersArray);
 
-  return selectedOffers.length > 0
+  return selectedOffersArray.length > 0
     ? `<h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-        ${getSelectedOffers()}
+        ${selectedOffer}
       </ul>`
     : '';
 };
 
-export const createPointTemplate = (point) => {
-  const {type, destination, dateFrom, dateTo, basePrice, offer, isFavorite} = point;
+export const createPointTemplate = ({type, destination, dateFrom, dateTo, basePrice, offer, isFavorite}) => {
+  const datetimeValueFrom = getFormattedDate(dateFrom, TIME_FORMATS.DATETIME);
+  const datetimeValueTo = getFormattedDate(dateTo, TIME_FORMATS.DATETIME);
+  const pointDateFrom = getFormattedDate(dateFrom, TIME_FORMATS.EVENT_DATE);
+  const pointStartDate = getFormattedDate(dateFrom, TIME_FORMATS.START_TIME);
+  const pointEndDate = getFormattedDate(dateTo, TIME_FORMATS.START_TIME);
+  const pointDuration = getDuration(dateFrom, dateTo);
+  const selectedOffersTemplate = getSelectedOffersTemplate(offer);
+  const favoriteClass = isFavorite ? 'event__favorite-btn--active' : '';
 
   return `<li class="trip-events__item">
             <div class="event">
-              <time class="event__date" datetime="${getFormattedDate(dateFrom, TIME_FORMATS.DATETIME)}">${getFormattedDate(dateFrom, TIME_FORMATS.EVENT_DATE)}</time>
+              <time class="event__date" datetime="${datetimeValueFrom}">${pointDateFrom}</time>
               <div class="event__type">
                 <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event icon">
               </div>
               <h3 class="event__title">${type} ${destination}</h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="${getFormattedDate(dateFrom, TIME_FORMATS.DATETIME)}">${getFormattedDate(dateFrom, TIME_FORMATS.START_TIME)}</time>
+                  <time class="event__start-time" datetime="${datetimeValueFrom}">${pointStartDate}</time>
                   &mdash;
-                  <time class="event__end-time" datetime="${getFormattedDate(dateTo, TIME_FORMATS.DATETIME)}">${getFormattedDate(dateTo, TIME_FORMATS.START_TIME)}</time>
+                  <time class="event__end-time" datetime="${datetimeValueTo}">${pointEndDate}</time>
                 </p>
-                <p class="event__duration">${getDuration(dateFrom, dateTo)}</p>
+                <p class="event__duration">${pointDuration}</p>
               </div>
               <p class="event__price">
                 &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
               </p>
-              ${getSelectedOffersTemplate(offer)}
-              <button class="event__favorite-btn  ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
+              ${selectedOffersTemplate}
+              <button class="event__favorite-btn  ${favoriteClass}" type="button">
                 <span class="visually-hidden">Add to favorite</span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
                   <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>

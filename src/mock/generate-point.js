@@ -1,7 +1,7 @@
 
+import {nanoid} from 'nanoid';
 import {TYPES_OF_POINT, DESTINATIONS, PRICE} from './constants.js';
 import {getRandomInteger, getRandomData} from '../utilities.js';
-import {getId} from './generate-id.js';
 import {generateOffers} from './generate-offers.js';
 import {generateInformation} from './generate-information.js';
 import {getDates} from './get-dates.js';
@@ -11,7 +11,7 @@ export const generatePoint = () => {
   const {dateFrom, dateTo} = getDates();
 
   return {
-    id: getId(),
+    id: nanoid(4),
     type,
     destination: getRandomData(DESTINATIONS),
     dateFrom,

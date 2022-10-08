@@ -2,16 +2,19 @@ import {getRandomInteger, getRandomData} from '../utilities.js';
 import {DESCRIPTIONS, SENTENCES_COUNT, PHOTOS_COUNT, PHOTOS_RANGE, PHOTO_URL} from './constants.js';
 
 const getDescription = () => {
+  const arrayOfSentences = DESCRIPTIONS.split('.')
+    .slice(0, -1)
+    .map((sentence) => sentence = `${sentence.trimStart()}.`);
   const sentences = [];
   const getSentence = () => {
-    let sentence = getRandomData(DESCRIPTIONS);
+    let sentence = getRandomData(arrayOfSentences);
     while (sentences.includes(sentence)) {
-      sentence = getRandomData(DESCRIPTIONS);
+      sentence = getRandomData(arrayOfSentences);
     }
     sentences.push(sentence);
     return sentence;
   };
-  return Array.from({length: getRandomInteger(SENTENCES_COUNT.MIN, SENTENCES_COUNT.MAX)}, () => getSentence()).join(' ');
+  return Array.from({length: getRandomInteger(SENTENCES_COUNT.MIN, SENTENCES_COUNT.MAX)}, getSentence).join(' ');
 };
 
 const getPhotos = () => {
@@ -24,7 +27,7 @@ const getPhotos = () => {
     photos.push(photo);
     return photo;
   };
-  return Array.from({length: getRandomInteger(PHOTOS_COUNT.MIN, PHOTOS_COUNT.MAX)}, () => getPhoto());
+  return Array.from({length: getRandomInteger(PHOTOS_COUNT.MIN, PHOTOS_COUNT.MAX)}, getPhoto);
 };
 
 export const generateInformation = () => ({

@@ -1,10 +1,14 @@
-export const createFilterTemplate = (filters) => {
-  const filterItemsTemplate = filters.map((filter, index) => (
+const createFilterItemsTemplate = (filters) => (
+  filters.map(({name}, index) => (
     `<div class="trip-filters__filter">
-      <input id="filter-${filter.name.toLowerCase()}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter.name.toLowerCase()}" ${index === 0 ? 'checked' : ''}>
-      <label class="trip-filters__filter-label" for="filter-${filter.name.toLowerCase()}">${filter.name}</label>
+      <input id="filter-${name.toLowerCase()}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${name.toLowerCase()}" ${index === 0 ? 'checked' : ''}>
+      <label class="trip-filters__filter-label" for="filter-${name.toLowerCase()}">${name}</label>
     </div>`
-  )).join('');
+  )).join('')
+);
+
+export const createFilterTemplate = (filters) => {
+  const filterItemsTemplate = createFilterItemsTemplate(filters);
 
   return `<form class="trip-filters" action="#" method="get">
             ${filterItemsTemplate}
