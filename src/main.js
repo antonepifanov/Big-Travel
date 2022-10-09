@@ -1,18 +1,24 @@
+import {getRandomInteger} from './utilities.js';
 import {createTripInfoTemplate} from './view/trip-info.js';
 import {createMenuTemplate} from './view/menu.js';
 import {createTripCoastTemplate} from './view/trip-coast.js';
-import {createFiltersTemplate} from './view/trip-filters.js';
+import {createFilterTemplate} from './view/trip-filters.js';
 import {createSortingTemplate} from './view/sorting.js';
 import {createPointsListTemplate} from './view/points-list.js';
 import {createEditPointTemplate} from './view/edit-point.js';
-import {createNewPointTemplate} from './view/new-point.js';
 import {createPointTemplate} from './view/point.js';
-
-const POINT_COUNT = 3;
+import {generateFilters} from './mock/generate-filters.js';
+import {generateSorting} from './mock/generate-sorting.js';
+import {MOCK_EVENTS} from './mock/constants.js';
+import {generatePoint} from './mock/generate-point.js';
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
+
+const mockPoints = Array.from({length: getRandomInteger(MOCK_EVENTS.MIN, MOCK_EVENTS.MAX)}, generatePoint);
+const filters = generateFilters(mockPoints);
+const sorting = generateSorting(mockPoints);
 
 const tripMain = document.querySelector('.trip-main');
 render(tripMain, createTripInfoTemplate(), 'afterbegin');
@@ -24,17 +30,17 @@ const pageNav = tripMain.querySelector('.trip-controls__navigation');
 render(pageNav, createMenuTemplate(), 'beforeend');
 
 const tripFilters = tripMain.querySelector('.trip-controls__filters');
-render(tripFilters, createFiltersTemplate(), 'beforeend');
+render(tripFilters, createFilterTemplate(filters), 'beforeend');
 
 const mainContent = document.querySelector('.trip-events');
-render(mainContent, createSortingTemplate(), 'beforeend');
+render(mainContent, createSortingTemplate(sorting), 'beforeend');
 
 render(mainContent, createPointsListTemplate(), 'beforeend');
 
 const pointsList = mainContent.querySelector('.trip-events__list');
-render(pointsList, createEditPointTemplate(), 'afterbegin');
-render(pointsList, createNewPointTemplate(), 'beforeend');
 
-for (let i = 0; i < POINT_COUNT; i++) {
-  render(pointsList, createPointTemplate(), 'beforeend');
-}
+render(pointsList, createEditPointTemplate(mockPoints[0]), 'afterbegin');
+
+mockPoints.slice(1).forEach((mockPoint) => {
+  render(pointsList, createPointTemplate(mockPoint), 'beforeend');
+});
