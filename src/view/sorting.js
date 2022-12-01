@@ -1,3 +1,5 @@
+import {createElement} from '../utilities.js';
+
 const createSortingItemsTemplate = (sorting) => (
   sorting.map(({name, sortingPoints}, index) => {
     const isDisabled = sortingPoints.length === 0
@@ -14,10 +16,33 @@ const createSortingItemsTemplate = (sorting) => (
   }).join('')
 );
 
-export const createSortingTemplate = (sorting) => {
+const createSortingTemplate = (sorting) => {
   const sortingItemsTemplate = createSortingItemsTemplate(sorting);
 
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             ${sortingItemsTemplate}
           </form>`;
 };
+
+export default class Sorting {
+  constructor(sorting) {
+    this._sorting = sorting;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSortingTemplate(this._sorting);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

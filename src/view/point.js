@@ -1,5 +1,5 @@
 import {TIME_FORMATS} from '../mock/constants.js';
-import {getDuration, getFormattedDate} from '../utilities.js';
+import {getDuration, getFormattedDate, createElement} from '../utilities.js';
 
 const getSelectedOffers = (selectedOffers) => (
   selectedOffers.map(({title, price}) => (
@@ -23,7 +23,7 @@ const getSelectedOffersTemplate = ({offers}) => {
     : '';
 };
 
-export const createPointTemplate = ({type, destination, dateFrom, dateTo, basePrice, offer, isFavorite}) => {
+const createPointTemplate = ({type, destination, dateFrom, dateTo, basePrice, offer, isFavorite}) => {
   const datetimeValueFrom = getFormattedDate(dateFrom, TIME_FORMATS.DATETIME);
   const datetimeValueTo = getFormattedDate(dateTo, TIME_FORMATS.DATETIME);
   const pointDateFrom = getFormattedDate(dateFrom, TIME_FORMATS.EVENT_DATE);
@@ -64,3 +64,26 @@ export const createPointTemplate = ({type, destination, dateFrom, dateTo, basePr
             </div>
           </li>`;
 };
+
+export default class Point {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
