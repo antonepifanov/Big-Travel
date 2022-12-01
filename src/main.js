@@ -1,10 +1,10 @@
 import {getRandomInteger, renderTemplate, renderElement, RENDER_POSITION} from './utilities.js';
-import {createTripInfoTemplate} from './view/trip-info.js';
+import TripInfoView from './view/trip-info.js';
 import SiteMenuView from './view/menu.js';
-import {createTripCoastTemplate} from './view/trip-coast.js';
+import PointsListView from './view/points-list.js';
+import TripCoastView from './view/trip-coast.js';
 import {createFilterTemplate} from './view/trip-filters.js';
 import {createSortingTemplate} from './view/sorting.js';
-import {createPointsListTemplate} from './view/points-list.js';
 import {createEditPointTemplate} from './view/edit-point.js';
 import {createPointTemplate} from './view/point.js';
 import {generateFilters} from './mock/generate-filters.js';
@@ -17,10 +17,10 @@ const filters = generateFilters(mockPoints);
 const sorting = generateSorting(mockPoints);
 
 const tripMain = document.querySelector('.trip-main');
-renderTemplate(tripMain, createTripInfoTemplate(), 'afterbegin');
+renderElement(tripMain, new TripInfoView().getElement(), 'afterbegin');
 
 const tripInfo = tripMain.querySelector('.trip-info');
-renderTemplate(tripInfo, createTripCoastTemplate(), 'beforeend');
+renderElement(tripInfo, new TripCoastView().getElement(), 'beforeend');
 
 const pageNav = tripMain.querySelector('.trip-controls__navigation');
 renderElement(pageNav, new SiteMenuView().getElement(), RENDER_POSITION.BEFOREEND);
@@ -31,7 +31,7 @@ renderTemplate(tripFilters, createFilterTemplate(filters), 'beforeend');
 const mainContent = document.querySelector('.trip-events');
 renderTemplate(mainContent, createSortingTemplate(sorting), 'beforeend');
 
-renderTemplate(mainContent, createPointsListTemplate(), 'beforeend');
+renderElement(mainContent, new PointsListView().getElement(), 'beforeend');
 
 const pointsList = mainContent.querySelector('.trip-events__list');
 
