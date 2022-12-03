@@ -1,6 +1,17 @@
 import {nanoid} from 'nanoid';
-import {getFormattedDate} from '../utilities.js';
+import {getFormattedDate, createElement} from '../utilities.js';
 import {TYPES_OF_POINT, DESTINATIONS, TIME_FORMATS} from '../mock/constants.js';
+
+const BLANK_POINT = {
+  id: nanoid(4),
+  type: null,
+  destination: '',
+  dateFrom: null,
+  dateTo: null,
+  basePrice: '',
+  offer: null,
+  information: null,
+};
 
 const createEventTypeGroupTemplate = (id, type) => (
   TYPES_OF_POINT.map((typeOfPoint) => {
@@ -89,17 +100,8 @@ const createDestinationDetailsTemplate = (information, offer) => {
     : '';
 };
 
-export const createEditPointTemplate = (point = {}) => {
-  const {
-    id = nanoid(4),
-    type = null,
-    destination = '',
-    dateFrom = null,
-    dateTo = null,
-    basePrice = '',
-    offer = null,
-    information = null,
-  } = point;
+const createEditPointTemplate = (point) => {
+  const {id, type, destination, dateFrom, dateTo, basePrice, offer, information} = point;
 
   const eventTypeGroupTemplate = createEventTypeGroupTemplate(id, type);
   const destinationOptionsTemplate = createDestinationOptionsTemplate();
@@ -175,3 +177,26 @@ export const createEditPointTemplate = (point = {}) => {
             </form>
           </li>`;
 };
+
+export default class EditPoint {
+  constructor(point = BLANK_POINT) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
