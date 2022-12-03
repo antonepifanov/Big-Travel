@@ -7,6 +7,7 @@ import FilterView from './view/trip-filters.js';
 import SortingView from './view/sorting.js';
 import EditPointView from './view/edit-point.js';
 import PointView from './view/point.js';
+import NoPointsView from './view/no-points.js';
 import {generateFilters} from './mock/generate-filters.js';
 import {generateSorting} from './mock/generate-sorting.js';
 import {MOCK_EVENTS} from './mock/constants.js';
@@ -29,11 +30,6 @@ const tripFilters = tripMain.querySelector('.trip-controls__filters');
 render(tripFilters, new FilterView(filters).getElement(), 'beforeend');
 
 const mainContent = document.querySelector('.trip-events');
-render(mainContent, new SortingView(sorting).getElement(), 'beforeend');
-
-render(mainContent, new PointsListView().getElement(), 'beforeend');
-
-const pointsList = mainContent.querySelector('.trip-events__list');
 
 const renderPoint = (pointListElement, point) => {
   const pointComponent = new PointView(point);
@@ -76,6 +72,15 @@ const renderPoint = (pointListElement, point) => {
   render(pointListElement, pointComponent.getElement(), RENDER_POSITION.BEFOREEND);
 };
 
-mockPoints.forEach((mockPoint) => {
-  renderPoint(pointsList, mockPoint);
-});
+const pointListComponent = new PointsListView();
+
+if (mockPoints.length === 0) {
+  render(mainContent, new NoPointsView().getElement(), 'beforeend');
+} else {
+  render(mainContent, new SortingView(sorting).getElement(), 'beforeend');
+  render(mainContent, pointListComponent.getElement(), 'beforeend');
+
+  mockPoints.forEach((mockPoint) => {
+    renderPoint(pointListComponent.getElement(), mockPoint);
+  });
+}
