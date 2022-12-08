@@ -179,13 +179,42 @@ const createEditPointTemplate = (point) => {
           </li>`;
 };
 
-export default class EditPoint extends AbstractView{
+export default class EditPoint extends AbstractView {
   constructor(point = BLANK_POINT) {
     super();
     this._point = point;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formCloseHandler = this._formCloseHandler.bind(this);
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  _formCloseHandler() {
+    this._callback.formClose();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  removeFormSubmitHandler() {
+    this.getElement().querySelector('form').removeEventListener('submit', this._formSubmitHandler);
+  }
+
+  setFormCloseHandler(callback) {
+    this._callback.formClose = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formCloseHandler);
+  }
+
+  removeFormCloseHandler() {
+    this.getElement().querySelector('.event__rollup-btn').removeEventListener('click', this._formCloseHandler);
   }
 }

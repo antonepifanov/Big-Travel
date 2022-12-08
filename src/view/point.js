@@ -70,9 +70,19 @@ export default class Point extends AbstractView{
   constructor(point) {
     super();
     this._point = point;
+    this._formOpenHandler = this._formOpenHandler.bind(this);
   }
 
   getTemplate() {
     return createPointTemplate(this._point);
+  }
+
+  _formOpenHandler() {
+    this._callback.formOpen();
+  }
+
+  setFormOpenHandler(callback) {
+    this._callback.formOpen = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formOpenHandler);
   }
 }

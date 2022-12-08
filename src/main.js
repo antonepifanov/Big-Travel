@@ -42,23 +42,28 @@ const renderPoint = (pointListElement, point) => {
     }
   };
 
-  const onRollupButtonClick = () => {
-    replaceFormToCard();
-    pointEditComponent.getElement().querySelector('.event__rollup-btn').removeEventListener('click', onRollupButtonClick);
-  };
-
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
-    replaceCardToForm();
-    document.addEventListener('keydown', onEscKeyDown);
-    pointEditComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', onRollupButtonClick);
-  });
-
-  pointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  const onSubmitButtonClick = () => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
-    pointEditComponent.getElement().querySelector('.event__rollup-btn').removeEventListener('click', onRollupButtonClick);
-  });
+    pointEditComponent.removeFormCloseHandler();
+    pointEditComponent.removeFormSubmitHandler();
+  };
+
+  function onRollupButtonCloseForm() {
+    replaceFormToCard();
+    document.removeEventListener('keydown', onEscKeyDown);
+    pointEditComponent.removeFormCloseHandler();
+    pointEditComponent.removeFormSubmitHandler();
+  }
+
+  const onRollupButtonOpenForm = () => {
+    replaceCardToForm();
+    document.addEventListener('keydown', onEscKeyDown);
+    pointEditComponent.setFormCloseHandler(onRollupButtonCloseForm);
+    pointEditComponent.setFormSubmitHandler(onSubmitButtonClick);
+  };
+
+  pointComponent.setFormOpenHandler(onRollupButtonOpenForm);
 
   render(pointListElement, pointComponent.getElement(), RENDER_POSITION.BEFOREEND);
 };
@@ -67,10 +72,10 @@ const renderPointsList = (listContainer, points) => {
   const pointListComponent = new PointsListView();
 
   if (points.length === 0) {
-    render(listContainer, new NoPointsView().getElement(), 'beforeend');
+    render(listContainer, new NoPointsView().getElement(), RENDER_POSITION.BEFOREEND);
   } else {
-    render(listContainer, new SortingView(sorting).getElement(), 'beforeend');
-    render(listContainer, pointListComponent.getElement(), 'beforeend');
+    render(listContainer, new SortingView(sorting).getElement(), RENDER_POSITION.BEFOREEND);
+    render(listContainer, pointListComponent.getElement(), RENDER_POSITION.BEFOREEND);
 
     points.forEach((point) => {
       renderPoint(pointListComponent.getElement(), point);
@@ -79,8 +84,8 @@ const renderPointsList = (listContainer, points) => {
 };
 
 const tripInfoComponent = new TripInfoView();
-render(tripMain, tripInfoComponent.getElement(), 'afterbegin');
-render(tripInfoComponent.getElement(), new TripCoastView().getElement(), 'beforeend');
+render(tripMain, tripInfoComponent.getElement(), RENDER_POSITION.AFTERBEGIN );
+render(tripInfoComponent.getElement(), new TripCoastView().getElement(), RENDER_POSITION.BEFOREEND);
 render(pageNav, new SiteMenuView().getElement(), RENDER_POSITION.BEFOREEND);
-render(tripFilters, new FilterView(filters).getElement(), 'beforeend');
+render(tripFilters, new FilterView(filters).getElement(), RENDER_POSITION.BEFOREEND);
 renderPointsList(mainContent, mockPoints);
