@@ -1,5 +1,6 @@
+import AbstractView from './abstract.js';
 import {TIME_FORMATS} from '../mock/constants.js';
-import {getDuration, getFormattedDate, createElement} from '../utilities.js';
+import {getDuration, getFormattedDate} from '../utilities.js';
 
 const getSelectedOffers = (selectedOffers) => (
   selectedOffers.map(({title, price}) => (
@@ -65,25 +66,13 @@ const createPointTemplate = ({type, destination, dateFrom, dateTo, basePrice, of
           </li>`;
 };
 
-export default class Point {
+export default class Point extends AbstractView{
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   getTemplate() {
     return createPointTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
