@@ -1,6 +1,6 @@
 import {nanoid} from 'nanoid';
 import AbstractView from './abstract.js';
-import {getFormattedDate} from '../utilities.js';
+import {getFormattedDate} from '../utilities/point.js';
 import {TYPES_OF_POINT, DESTINATIONS, TIME_FORMATS} from '../mock/constants.js';
 
 const BLANK_POINT = {

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../utilities.js';
-import {DATE_GAPS} from './constants';
+import {getRandomInteger} from '../utilities/common.js';
+import {DATE_GAPS} from './constants.js';
 
 export const getDates = () => {
   const dateFrom = dayjs()
