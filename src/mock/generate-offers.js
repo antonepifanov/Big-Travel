@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomData} from '../utilities.js';
+import {getRandomInteger, getRandomData} from '../utilities/common.js';
 import {OFFERS_COUNT, TITLES_OF_OFFERS, PRICE, TYPES_OF_POINT} from './constants.js';
 
 const getOffer = () => {

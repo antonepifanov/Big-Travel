@@ -1,4 +1,6 @@
-import {getRandomInteger, render, RENDER_POSITION} from './utilities.js';
+import {render, RENDER_POSITION, replace} from './utilities/render.js';
+import {getRandomInteger} from './utilities/common.js';
+import AbstractView from './view/abstract.js';
 import TripInfoView from './view/trip-info.js';
 import SiteMenuView from './view/menu.js';
 import PointsListView from './view/points-list.js';
@@ -22,16 +24,23 @@ const mockPoints = Array.from({length: getRandomInteger(MOCK_EVENTS.MIN, MOCK_EV
 const filters = generateFilters(mockPoints);
 const sorting = generateSorting(mockPoints);
 
+const pointListComponent = new PointsListView();
+const tripInfoComponent = new TripInfoView();
+
 const renderPoint = (pointListElement, point) => {
+  if (pointListElement instanceof AbstractView) {
+    pointListElement = pointListElement.getElement();
+  }
+
   const pointComponent = new PointView(point);
   const pointEditComponent = new EditPointView(point);
 
   const replaceCardToForm = () => {
-    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    replace(pointEditComponent, pointComponent);
   };
 
   const replaceFormToCard = () => {
-    pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+    replace(pointComponent, pointEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -42,45 +51,47 @@ const renderPoint = (pointListElement, point) => {
     }
   };
 
-  const onRollupButtonClick = () => {
-    replaceFormToCard();
-    pointEditComponent.getElement().querySelector('.event__rollup-btn').removeEventListener('click', onRollupButtonClick);
-  };
-
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
-    replaceCardToForm();
-    document.addEventListener('keydown', onEscKeyDown);
-    pointEditComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', onRollupButtonClick);
-  });
-
-  pointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  const onSubmitButtonClick = () => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
-    pointEditComponent.getElement().querySelector('.event__rollup-btn').removeEventListener('click', onRollupButtonClick);
-  });
+    pointEditComponent.removeFormCloseHandler();
+    pointEditComponent.removeFormSubmitHandler();
+  };
 
-  render(pointListElement, pointComponent.getElement(), RENDER_POSITION.BEFOREEND);
+  function onRollupButtonCloseForm() {
+    replaceFormToCard();
+    document.removeEventListener('keydown', onEscKeyDown);
+    pointEditComponent.removeFormCloseHandler();
+    pointEditComponent.removeFormSubmitHandler();
+  }
+
+  const onRollupButtonOpenForm = () => {
+    replaceCardToForm();
+    document.addEventListener('keydown', onEscKeyDown);
+    pointEditComponent.setFormCloseHandler(onRollupButtonCloseForm);
+    pointEditComponent.setFormSubmitHandler(onSubmitButtonClick);
+  };
+
+  pointComponent.setFormOpenHandler(onRollupButtonOpenForm);
+
+  render(pointListElement, pointComponent, RENDER_POSITION.BEFOREEND);
 };
 
 const renderPointsList = (listContainer, points) => {
-  const pointListComponent = new PointsListView();
-
   if (points.length === 0) {
-    render(listContainer, new NoPointsView().getElement(), 'beforeend');
+    render(listContainer, new NoPointsView(), RENDER_POSITION.BEFOREEND);
   } else {
-    render(listContainer, new SortingView(sorting).getElement(), 'beforeend');
-    render(listContainer, pointListComponent.getElement(), 'beforeend');
+    render(listContainer, new SortingView(sorting), RENDER_POSITION.BEFOREEND);
+    render(listContainer, pointListComponent, RENDER_POSITION.BEFOREEND);
 
     points.forEach((point) => {
-      renderPoint(pointListComponent.getElement(), point);
+      renderPoint(pointListComponent, point);
     });
   }
 };
 
-const tripInfoComponent = new TripInfoView();
-render(tripMain, tripInfoComponent.getElement(), 'afterbegin');
-render(tripInfoComponent.getElement(), new TripCoastView().getElement(), 'beforeend');
-render(pageNav, new SiteMenuView().getElement(), RENDER_POSITION.BEFOREEND);
-render(tripFilters, new FilterView(filters).getElement(), 'beforeend');
+render(tripMain, tripInfoComponent, RENDER_POSITION.AFTERBEGIN );
+render(tripInfoComponent, new TripCoastView(), RENDER_POSITION.BEFOREEND);
+render(pageNav, new SiteMenuView(), RENDER_POSITION.BEFOREEND);
+render(tripFilters, new FilterView(filters), RENDER_POSITION.BEFOREEND);
 renderPointsList(mainContent, mockPoints);

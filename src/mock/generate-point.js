@@ -1,7 +1,7 @@
 
 import {nanoid} from 'nanoid';
 import {TYPES_OF_POINT, DESTINATIONS, PRICE} from './constants.js';
-import {getRandomInteger, getRandomData} from '../utilities.js';
+import {getRandomInteger, getRandomData} from '../utilities/common.js';
 import {generateOffers} from './generate-offers.js';
 import {generateInformation} from './generate-information.js';
 import {getDates} from './get-dates.js';

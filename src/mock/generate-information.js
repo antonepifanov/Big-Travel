@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomData} from '../utilities.js';
+import {getRandomInteger, getRandomData} from '../utilities/common.js';
 import {DESCRIPTIONS, SENTENCES_COUNT, PHOTOS_COUNT, PHOTOS_RANGE, PHOTO_URL} from './constants.js';
 
 const getDescription = () => {

@@ -1,5 +1,6 @@
 import {nanoid} from 'nanoid';
-import {getFormattedDate, createElement} from '../utilities.js';
+import AbstractView from './abstract.js';
+import {getFormattedDate} from '../utilities/point.js';
 import {TYPES_OF_POINT, DESTINATIONS, TIME_FORMATS} from '../mock/constants.js';
 
 const BLANK_POINT = {
@@ -178,25 +179,42 @@ const createEditPointTemplate = (point) => {
           </li>`;
 };
 
-export default class EditPoint {
+export default class EditPoint extends AbstractView {
   constructor(point = BLANK_POINT) {
+    super();
     this._point = point;
-    this._element = null;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formCloseHandler = this._formCloseHandler.bind(this);
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  _formCloseHandler() {
+    this._callback.formClose();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  removeFormSubmitHandler() {
+    this.getElement().querySelector('form').removeEventListener('submit', this._formSubmitHandler);
+  }
+
+  setFormCloseHandler(callback) {
+    this._callback.formClose = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formCloseHandler);
+  }
+
+  removeFormCloseHandler() {
+    this.getElement().querySelector('.event__rollup-btn').removeEventListener('click', this._formCloseHandler);
   }
 }
