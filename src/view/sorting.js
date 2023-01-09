@@ -25,7 +25,7 @@ const createSortingTemplate = (sorting) => {
 };
 
 export default class Sorting extends AbstractView{
-  constructor(sorting) {
+  constructor(sorting = []) {
     super();
     this._sorting = sorting;
   }
