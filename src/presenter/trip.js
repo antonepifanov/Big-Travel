@@ -37,7 +37,7 @@ export default class Trip {
   _handlePointChange(updatedPoint) {
     this._tripPoints = updateItem(this._tripPoints, updatedPoint);
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
-    this._sourcedtripPoints = updateItem(this._sourcedBoardTasks, updatedPoint);
+    this._sourcedtripPoints = updateItem(this._sourcedTripPoints, updatedPoint);
   }
 
   _handleModeChange() {
@@ -85,7 +85,7 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointsListComponent, this._handleTaskChange, this._handleModeChange);
+    const pointPresenter = new PointPresenter(this._pointsListComponent, this._handlePointChange, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
