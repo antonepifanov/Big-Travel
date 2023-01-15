@@ -18,3 +18,9 @@ export const getDuration = (dateFrom, dateTo) => {
 };
 
 export const getFormattedDate = (date, format) => dayjs(date).format(format);
+
+export const sortByDay = (pointA, PointB) => dayjs(pointA.dateFrom) - dayjs(PointB.dateFrom);
+
+export const sortByTime = (pointA, PointB) => dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom)) - dayjs(PointB.dateTo).diff(dayjs(PointB.dateFrom));
+
+export const sortByPrice = (pointA, PointB) => pointA.basePrice - PointB.basePrice;
