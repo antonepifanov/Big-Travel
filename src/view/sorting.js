@@ -1,8 +1,8 @@
 import AbstractView from './abstract.js';
 
 const createSortingItemsTemplate = (sorting) => (
-  sorting.map(({name, sortingPoints}, index) => {
-    const isDisabled = sortingPoints.length === 0
+  sorting.map(({name, pointsCount}, index) => {
+    const isDisabled = pointsCount === 0
       ? 'disabled'
       : '';
     const isChecked = index === 0
@@ -25,12 +25,27 @@ const createSortingTemplate = (sorting) => {
 };
 
 export default class Sorting extends AbstractView{
-  constructor(sorting) {
+  constructor(sorting = []) {
     super();
     this._sorting = sorting;
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
     return createSortingTemplate(this._sorting);
+  }
+
+  _sortTypeChangeHandler(evt) {
+    if (evt.target.tagName !== 'LABEL') {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.sortTypeChange(evt.target.textContent.toLowerCase());
+  }
+
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
   }
 }
