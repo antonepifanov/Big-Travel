@@ -74,6 +74,7 @@ export default class Point {
   _escKeyDownHandler (evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this._editPointComponent.reset(this._point);
       this._replaceFormToCard();
       document.removeEventListener('keydown', this._escKeyDownHandler);
     }
@@ -88,6 +89,7 @@ export default class Point {
   }
 
   _onRollupButtonCloseForm() {
+    this._editPointComponent.reset(this._point);
     this._replaceFormToCard();
     document.removeEventListener('keydown', this._escKeyDownHandler);
     this._editPointComponent.removeFormCloseHandler();

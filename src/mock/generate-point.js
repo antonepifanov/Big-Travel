@@ -8,6 +8,7 @@ import {getDates} from './get-dates.js';
 
 export const generatePoint = () => {
   const type = getRandomData(TYPES_OF_POINT);
+  const offer = generateOffers(type);
   const {dateFrom, dateTo} = getDates();
 
   return {
@@ -16,7 +17,7 @@ export const generatePoint = () => {
     destination: getRandomData(DESTINATIONS),
     dateFrom,
     dateTo,
-    offer: generateOffers(type),
+    offer,
     information: generateInformation(),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     basePrice: getRandomInteger(PRICE.MIN, PRICE.MAX),
