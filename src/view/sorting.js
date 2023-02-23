@@ -1,11 +1,11 @@
 import AbstractView from './abstract.js';
 
-const createSortingItemsTemplate = (sorting) => (
-  sorting.map(({name, pointsCount}, index) => {
+const createSortingItemsTemplate = (sorting, currentSortType) => (
+  sorting.map(({name, pointsCount}) => {
     const isDisabled = pointsCount === 0
       ? 'disabled'
       : '';
-    const isChecked = index === 0
+    const isChecked = currentSortType === name.toLowerCase()
       ? 'checked'
       : '';
 
@@ -16,8 +16,8 @@ const createSortingItemsTemplate = (sorting) => (
   }).join('')
 );
 
-const createSortingTemplate = (sorting) => {
-  const sortingItemsTemplate = createSortingItemsTemplate(sorting);
+const createSortingTemplate = (sorting, currentSortType) => {
+  const sortingItemsTemplate = createSortingItemsTemplate(sorting, currentSortType);
 
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             ${sortingItemsTemplate}
@@ -25,14 +25,15 @@ const createSortingTemplate = (sorting) => {
 };
 
 export default class Sorting extends AbstractView{
-  constructor(sorting = []) {
+  constructor(sorting, currentSortType) {
     super();
     this._sorting = sorting;
+    this._currentSortType = currentSortType;
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createSortingTemplate(this._sorting);
+    return createSortingTemplate(this._sorting, this._currentSortType);
   }
 
   _sortTypeChangeHandler(evt) {

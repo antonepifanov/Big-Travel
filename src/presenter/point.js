@@ -1,6 +1,8 @@
 import EditPointView from '../view/edit-point.js';
 import PointView from '../view/point.js';
 import {render, RENDER_POSITION, replace, remove} from '../utilities/render.js';
+import {USER_ACTION, UPDATE_TYPE} from '../constants.js';
+import {isPriceChange, isDatesFromEqual, isDurationChange} from '../utilities/point.js';
 
 const MODE = {
   DEFAULT: 'DEFAULT',
@@ -20,6 +22,7 @@ export default class Point {
     this._onRollupButtonCloseForm = this._onRollupButtonCloseForm.bind(this);
     this._onRollupButtonOpenForm = this._onRollupButtonOpenForm.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -29,6 +32,7 @@ export default class Point {
     const prevEditPointComponent = this._editPointComponent;
     this._pointComponent = new PointView(point);
     this._editPointComponent = new EditPointView(point);
+    this._editPointComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointComponent.setFormOpenHandler(this._onRollupButtonOpenForm);
 
@@ -66,12 +70,12 @@ export default class Point {
     this._mode = MODE.EDITING;
   }
 
-  _replaceFormToCard () {
+  _replaceFormToCard() {
     replace(this._pointComponent, this._editPointComponent);
     this._mode = MODE.DEFAULT;
   }
 
-  _escKeyDownHandler (evt) {
+  _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this._editPointComponent.reset(this._point);
@@ -80,12 +84,27 @@ export default class Point {
     }
   }
 
-  _handleFormSubmit (point) {
-    this._changeData(point);
+  _handleFormSubmit(update) {
+    const isMinorUpdate =
+      !isDatesFromEqual(this._point.dateFrom, update.dateFrom) ||
+      isPriceChange(this._point.basePrice, update.basePrice) ||
+      isDurationChange(this._point.dateFrom, this._point.dateTo, update.dateFrom, update.dateTo);
+    this._changeData(
+      USER_ACTION.UPDATE_POINT,
+      isMinorUpdate ? UPDATE_TYPE.MINOR : UPDATE_TYPE.PATCH,
+      update);
     this._replaceFormToCard();
     document.removeEventListener('keydown', this._escKeyDownHandler);
     this._editPointComponent.removeFormCloseHandler();
     this._editPointComponent.removeFormSubmitHandler();
+  }
+
+  _handleDeleteClick(point) {
+    this._changeData(
+      USER_ACTION.DELETE_POINT,
+      UPDATE_TYPE.MINOR,
+      point,
+    );
   }
 
   _onRollupButtonCloseForm() {
@@ -96,7 +115,7 @@ export default class Point {
     this._editPointComponent.removeFormSubmitHandler();
   }
 
-  _onRollupButtonOpenForm () {
+  _onRollupButtonOpenForm() {
     this._replaceCardToForm();
     document.addEventListener('keydown', this._escKeyDownHandler);
     this._editPointComponent.setFormCloseHandler(this._onRollupButtonCloseForm);
@@ -105,6 +124,8 @@ export default class Point {
 
   _handleFavoriteClick() {
     this._changeData(
+      USER_ACTION.UPDATE_POINT,
+      UPDATE_TYPE.MINOR,
       Object.assign(
         {},
         this._point,

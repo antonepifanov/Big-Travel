@@ -172,7 +172,7 @@ const createEditPointTemplate = (point) => {
                     <span class="visually-hidden">Price</span>
                     &euro;
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${basePrice}">
+                  <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -189,16 +189,32 @@ export default class EditPoint extends SmartView {
     super();
     this._data = EditPoint.parsePointToData(point);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._pointTypeChangeHandler = this._pointTypeChangeHandler.bind(this);
     this._pointDestinationChangeHandler = this._pointDestinationChangeHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
+    this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._datepickerTo = null;
     this._datepickerFrom = null;
     this._setInnerHandlers();
     this._setDatepickerFrom();
     this._setDatepickerTo();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepickerTo) {
+      this._datepickerTo.destroy();
+      this._datepickerTo = null;
+    }
+
+    if (this._datepickerFrom) {
+      this._datepickerFrom.destroy();
+      this._datepickerFrom = null;
+    }
   }
 
   _setDatepickerFrom() {
@@ -251,6 +267,7 @@ export default class EditPoint extends SmartView {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFormCloseHandler(this._callback.formClose);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _setInnerHandlers() {
@@ -273,8 +290,19 @@ export default class EditPoint extends SmartView {
   _pointDestinationChangeHandler(evt) {
     evt.preventDefault();
     this.updateData({
+      destination: evt.target.value,
       information: generateInformation(),
     });
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(EditPoint.parseDataToPoint(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
   }
 
   _priceInputHandler(evt) {
@@ -304,7 +332,9 @@ export default class EditPoint extends SmartView {
 
   setFormCloseHandler(callback) {
     this._callback.formClose = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formCloseHandler);
+    if (this.getElement().querySelector('.event__rollup-btn')) {
+      this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formCloseHandler);
+    }
   }
 
   removeFormCloseHandler() {
