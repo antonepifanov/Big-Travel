@@ -5,16 +5,16 @@ import TripCoastView from '../view/trip-coast.js';
 import PointPresenter from './point.js';
 import NoPointsView from '../view/no-points.js';
 import {render, RENDER_POSITION} from '../utilities/render.js';
-import {updateItem} from '../utilities/common.js';
 import {sortByDay, sortByTime, sortByPrice} from '../utilities/point.js';
 import {SORT_TYPE} from '../constants.js';
 
 export default class Trip {
-  constructor(tripContainer, pointsListContainer, sorting) {
+  constructor(tripContainer, pointsListContainer, sorting, pointsModel) {
     this._tripContainer = tripContainer;
     this._pointsListContainer = pointsListContainer;
+    this._pointsModel = pointsModel;
     this._pointPresenter = {};
-    this._currentSortType = SORT_TYPE.DEFAULT;
+    this._currentSortType = SORT_TYPE.DAY;
 
     this._tripInfoComponent = new TripInfoView();
     this._pointsListComponent = new PointsListView();
@@ -27,17 +27,25 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init(tripPoints) {
-    this._tripPoints = tripPoints.slice().sort(sortByDay);
-    this._sourcedTripPoints = tripPoints.slice();
-
+  init() {
     this._renderTrip();
   }
 
+  _getPoints() {
+    switch (this._currentSortType) {
+      case SORT_TYPE.DAY:
+        return this._pointsModel.getPoints().slice().sort(sortByDay);
+      case SORT_TYPE.TIME:
+        return this._pointsModel.getPoints().slice().sort(sortByTime);
+      case SORT_TYPE.PRICE:
+        return this._pointsModel.getPoints().slice().sort(sortByPrice);
+    }
+
+    return this._pointsModel.getPoints();
+  }
+
   _handlePointChange(updatedPoint) {
-    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
-    this._sourcedTripPoints = updateItem(this._sourcedTripPoints, updatedPoint);
   }
 
   _handleModeChange() {
@@ -45,28 +53,12 @@ export default class Trip {
       .forEach((presenter) => presenter.resetView());
   }
 
-  _sortPoints(sortType) {
-    switch (sortType) {
-      case SORT_TYPE.DAY:
-        this._tripPoints.sort(sortByDay);
-        break;
-      case SORT_TYPE.TIME:
-        this._tripPoints.sort(sortByTime).reverse();
-        break;
-      case SORT_TYPE.PRICE:
-        this._tripPoints.sort(sortByPrice).reverse();
-        break;
-    }
-
-    this._currentSortType = sortType;
-  }
-
   _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
       return;
     }
 
-    this._sortPoints(sortType);
+    this._currentSortType = sortType;
     this._clearPointsList();
     this._renderPoints();
   }
@@ -93,12 +85,13 @@ export default class Trip {
   _clearPointsList() {
     Object.values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());
-    this._taskPresenter = {};
+    this._pointPresenter = {};
   }
 
   _renderPoints() {
     render(this._pointsListContainer, this._pointsListComponent, RENDER_POSITION.BEFOREEND);
-    this._tripPoints.forEach((point) => {
+    const points = this._getPoints().slice();
+    points.forEach((point) => {
       this._renderPoint(point);
     });
   }
@@ -108,7 +101,7 @@ export default class Trip {
   }
 
   _renderTrip() {
-    if (this._tripPoints.length === 0) {
+    if (this._getPoints().length === 0) {
       this._renderNoPoints();
       return;
     }
