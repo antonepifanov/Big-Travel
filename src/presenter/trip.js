@@ -37,15 +37,8 @@ export default class Trip {
     this._pointNewPresenter = new PointNewPresenter(this._pointsListComponent, this._handleViewAction);
   }
 
-<<<<<<< HEAD
-  _handlePointChange(updatedPoint) {
-    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
-    this._pointPresenter[updatedPoint.id].init(updatedPoint);
-    this._sourcedtripPoints = updateItem(this._sourcedTripPoints, updatedPoint);
-=======
   init() {
     this._renderTrip();
->>>>>>> 6c80f1114531c395e6ae4ef05326cad25b8cb8f8
   }
 
   createTask() {
@@ -136,11 +129,7 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-<<<<<<< HEAD
-    const pointPresenter = new PointPresenter(this._pointsListComponent, this._handlePointChange, this._handleModeChange);
-=======
     const pointPresenter = new PointPresenter(this._pointsListComponent, this._handleViewAction, this._handleModeChange);
->>>>>>> 6c80f1114531c395e6ae4ef05326cad25b8cb8f8
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }

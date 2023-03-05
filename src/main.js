@@ -16,7 +16,6 @@ const tripFilters = tripMain.querySelector('.trip-controls__filters');
 
 const mockPoints = Array.from({length: getRandomInteger(MOCK_EVENTS.MIN, MOCK_EVENTS.MAX)}, generatePoint);
 const sorting = generateSorting(mockPoints);
-
 const pointsModel = new PointsModel();
 pointsModel.setPoints(mockPoints);
 

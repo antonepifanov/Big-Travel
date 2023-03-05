@@ -10,12 +10,12 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const BLANK_POINT = {
   id: nanoid(4),
-  type: null,
+  type: '',
   destination: '',
   dateFrom: null,
   dateTo: null,
   basePrice: '',
-  offer: null,
+  offers: null,
   information: null,
 };
 
@@ -38,7 +38,7 @@ const createDestinationOptionsTemplate = () => (
   )).join(' ')
 );
 
-const createOfferTemplate = ({offers, type}) => (
+const createOfferTemplate = (type, offers) => (
   offers.map(({title, price, isSelected}, index) => (
     `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type.toLowerCase()}-${index + 1}" type="checkbox" name="event-offer-${type.toLowerCase()}" ${isSelected ? 'checked' : ''}>
@@ -51,8 +51,8 @@ const createOfferTemplate = ({offers, type}) => (
   )).join(' ')
 );
 
-const createOffersTemplate = ({offers, type}) => {
-  const offerTemplate = createOfferTemplate({offers, type});
+const createOffersTemplate = (type, offers) => {
+  const offerTemplate = createOfferTemplate(type, offers);
 
   return offers.length > 0
     ? `<section class="event__section  event__section--offers">
@@ -90,15 +90,15 @@ const createInformationTemplate = ({photos, description}) => {
           </section>`;
 };
 
-const createDestinationDetailsTemplate = (information, offer) => {
-  const offersTemplate = offer !== null
-    ? createOffersTemplate(offer)
+const createDestinationDetailsTemplate = (information, type, offers) => {
+  const offersTemplate = offers !== null
+    ? createOffersTemplate(type, offers)
     : '';
   const informationTemplate = information !== null
     ? createInformationTemplate(information)
     : '';
 
-  return information !== null || offer !== null
+  return information !== null || offers !== null
     ? `<section class="event__details">
         ${offersTemplate}
         ${informationTemplate}      
@@ -107,13 +107,13 @@ const createDestinationDetailsTemplate = (information, offer) => {
 };
 
 const createEditPointTemplate = (point) => {
-  const {id, type, destination, dateFrom, dateTo, basePrice, offer, information} = point;
+  const {id, type, destination, dateFrom, dateTo, basePrice, offers, information} = point;
 
   const eventTypeGroupTemplate = createEventTypeGroupTemplate(id, type);
-  const destinationOptionsTemplate = createDestinationOptionsTemplate();
-  const destinationDetailsTemplate = createDestinationDetailsTemplate(information, offer);
+  const destinationOptionsTemplate = createDestinationOptionsTemplate(type);
+  const destinationDetailsTemplate = createDestinationDetailsTemplate(information, type, offers);
   const isType = type !== null ? type : '';
-  const isNeedIcon = type !== null
+  const isNeedIcon = type !== ''
     ? `<img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">`
     : '';
   const isDateFrom = dateFrom !== null
@@ -122,10 +122,10 @@ const createEditPointTemplate = (point) => {
   const isDateTo = dateTo !== null
     ? getFormattedDate(dateTo, TIME_FORMATS.FORM_TIME)
     : '';
-  const buttonName = destination === ''
+  const buttonName = type === '' && destination === '' && dateFrom === null && dateTo === null
     ? 'Cancel'
     : 'Delete';
-  const isNeedRollupButton = destination !== ''
+  const isNeedRollupButton = type === '' && destination === '' && dateFrom === null && dateTo === null
     ? `<button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>`
@@ -283,7 +283,7 @@ export default class EditPoint extends SmartView {
     }
     this.updateData({
       type: evt.target.textContent,
-      offer: generateOffers(evt.target.textContent),
+      offers: generateOffers(evt.target.textContent),
     });
   }
 
@@ -326,31 +326,27 @@ export default class EditPoint extends SmartView {
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 
-  removeFormSubmitHandler() {
-    this.getElement().querySelector('form').removeEventListener('submit', this._formSubmitHandler);
-  }
-
   setFormCloseHandler(callback) {
     this._callback.formClose = callback;
+    if (this.getElement().querySelector('.event__rollup-btn')) {
+      this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formCloseHandler);
+    }
+
     if (this.getElement().querySelector('.event__rollup-btn')) {
       this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formCloseHandler);
     }
   }
 
-  removeFormCloseHandler() {
-    this.getElement().querySelector('.event__rollup-btn').removeEventListener('click', this._formCloseHandler);
-  }
-
   _dateFromChangeHandler([userDate]) {
     this.updateData({
       dateFrom: userDate,
-    });
+    }, true);
   }
 
   _dateToChangeHandler([userDate]) {
     this.updateData({
       dateTo: userDate,
-    });
+    }), true;
   }
 
   static parsePointToData(point) {

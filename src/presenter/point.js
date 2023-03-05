@@ -94,9 +94,6 @@ export default class Point {
       isMinorUpdate ? UPDATE_TYPE.MINOR : UPDATE_TYPE.PATCH,
       update);
     this._replaceFormToCard();
-    document.removeEventListener('keydown', this._escKeyDownHandler);
-    this._editPointComponent.removeFormCloseHandler();
-    this._editPointComponent.removeFormSubmitHandler();
   }
 
   _handleDeleteClick(point) {
@@ -110,9 +107,6 @@ export default class Point {
   _onRollupButtonCloseForm() {
     this._editPointComponent.reset(this._point);
     this._replaceFormToCard();
-    document.removeEventListener('keydown', this._escKeyDownHandler);
-    this._editPointComponent.removeFormCloseHandler();
-    this._editPointComponent.removeFormSubmitHandler();
   }
 
   _onRollupButtonOpenForm() {

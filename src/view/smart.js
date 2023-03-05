@@ -6,7 +6,7 @@ export default class Smart extends Abstract {
     this._data = {};
   }
 
-  updateData(update, justPriceUpdate) {
+  updateData(update, justDataUpdate) {
     if (!update) {
       return;
     }
@@ -17,7 +17,7 @@ export default class Smart extends Abstract {
       update,
     );
 
-    if (justPriceUpdate) {
+    if (justDataUpdate) {
       return;
     }
 

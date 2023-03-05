@@ -33,5 +33,5 @@ export const generateOffers = (type) => {
 
   return setOfOffers.find((offer) => (
     offer.type === type
-  ));
+  )).offers;
 };

@@ -12,8 +12,10 @@ const getSelectedOffers = (selectedOffers) => (
   )).join(' ')
 );
 
-const getSelectedOffersTemplate = ({offers}) => {
-  const selectedOffersArray = offers.filter((offerItem) => offerItem.isSelected);
+const getSelectedOffersTemplate = (offers) => {
+  const selectedOffersArray = offers !== null
+    ? offers.filter((offerItem) => offerItem.isSelected)
+    : [];
   const selectedOffer = getSelectedOffers(selectedOffersArray);
 
   return selectedOffersArray.length > 0
@@ -24,21 +26,23 @@ const getSelectedOffersTemplate = ({offers}) => {
     : '';
 };
 
-const createPointTemplate = ({type, destination, dateFrom, dateTo, basePrice, offer, isFavorite}) => {
+const createPointTemplate = ({type, destination, dateFrom, dateTo, basePrice, offers, isFavorite}) => {
   const datetimeValueFrom = getFormattedDate(dateFrom, TIME_FORMATS.DATETIME);
   const datetimeValueTo = getFormattedDate(dateTo, TIME_FORMATS.DATETIME);
   const pointDateFrom = getFormattedDate(dateFrom, TIME_FORMATS.EVENT_DATE);
   const pointStartDate = getFormattedDate(dateFrom, TIME_FORMATS.START_TIME);
   const pointEndDate = getFormattedDate(dateTo, TIME_FORMATS.START_TIME);
-  const pointDuration = getDuration(dateFrom, dateTo);
-  const selectedOffersTemplate = getSelectedOffersTemplate(offer);
+  const pointDuration = dateFrom !== null && dateTo !== null
+    ? getDuration(dateFrom, dateTo)
+    : '';
+  const selectedOffersTemplate = getSelectedOffersTemplate(offers);
   const favoriteClass = isFavorite ? 'event__favorite-btn--active' : '';
 
   return `<li class="trip-events__item">
             <div class="event">
               <time class="event__date" datetime="${datetimeValueFrom}">${pointDateFrom}</time>
               <div class="event__type">
-                <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event icon">
+                ${type !== '' ? `<img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event icon">` : ''}
               </div>
               <h3 class="event__title">${type} ${destination}</h3>
               <div class="event__schedule">
@@ -66,7 +70,7 @@ const createPointTemplate = ({type, destination, dateFrom, dateTo, basePrice, of
           </li>`;
 };
 
-export default class Point extends AbstractView{
+export default class Point extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
