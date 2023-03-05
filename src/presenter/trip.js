@@ -65,6 +65,9 @@ export default class Trip {
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
+      case USER_ACTION.UPDATE_OFFER:
+        this._pointsModel.updatePoint(updateType, update);
+        break;
       case USER_ACTION.UPDATE_POINT:
         this._pointsModel.updatePoint(updateType, update);
         break;

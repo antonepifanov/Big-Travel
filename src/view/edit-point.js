@@ -188,7 +188,10 @@ export default class EditPoint extends SmartView {
   constructor(point = BLANK_POINT) {
     super();
     this._data = EditPoint.parsePointToData(point);
+    this._offers = this._data.offers;
+    this._toggleOffersHandler = this._toggleOffersHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._toggleOffersHandler = this._toggleOffersHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._pointTypeChangeHandler = this._pointTypeChangeHandler.bind(this);
@@ -252,9 +255,7 @@ export default class EditPoint extends SmartView {
   }
 
   reset(point) {
-    this.updateData(
-      EditPoint.parsePointToData(point),
-    );
+    this.updateData(EditPoint.parsePointToData(point), true);
   }
 
   getTemplate() {
@@ -274,6 +275,9 @@ export default class EditPoint extends SmartView {
     this.getElement().querySelector('.event__type-group').addEventListener('click', this._pointTypeChangeHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._pointDestinationChangeHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
+    if (this.getElement().querySelector('.event__available-offers')) {
+      this.getElement().querySelector('.event__available-offers').addEventListener('click', this._toggleOffersHandler);
+    }
   }
 
   _pointTypeChangeHandler(evt) {
@@ -281,9 +285,10 @@ export default class EditPoint extends SmartView {
     if (evt.target.tagName !== 'LABEL') {
       return;
     }
+    this._offers = generateOffers(evt.target.textContent);
     this.updateData({
       type: evt.target.textContent,
-      offers: generateOffers(evt.target.textContent),
+      offers: this._offers,
     });
   }
 
@@ -328,13 +333,35 @@ export default class EditPoint extends SmartView {
 
   setFormCloseHandler(callback) {
     this._callback.formClose = callback;
-    if (this.getElement().querySelector('.event__rollup-btn')) {
+    if (this.getElement().querySelector('.event__reset-btn')) {
       this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formCloseHandler);
     }
 
     if (this.getElement().querySelector('.event__rollup-btn')) {
       this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formCloseHandler);
     }
+  }
+
+  _toggleOffersHandler(evt) {
+    if (!evt.target.closest('label')) {
+      return;
+    }
+    const targetOffer = evt.target.closest('label');
+    const index = this._offers.findIndex((offer) => offer.title === targetOffer.querySelector('.event__offer-title').textContent);
+    this._offers = [
+      ...this._offers.slice(0, index),
+      Object.assign(
+        {},
+        this._offers[index],
+        {
+          isSelected: !this._offers[index].isSelected,
+        },
+      ),
+      ...this._offers.slice(index + 1),
+    ];
+    this.updateData({
+      offers: this._offers,
+    });
   }
 
   _dateFromChangeHandler([userDate]) {
@@ -355,7 +382,6 @@ export default class EditPoint extends SmartView {
 
   static parseDataToPoint(data) {
     data = Object.assign({}, data);
-
     return data;
   }
 }
