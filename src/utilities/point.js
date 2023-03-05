@@ -24,3 +24,13 @@ export const sortByDay = (pointA, PointB) => dayjs(pointA.dateFrom) - dayjs(Poin
 export const sortByTime = (pointA, PointB) => dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom)) - dayjs(PointB.dateTo).diff(dayjs(PointB.dateFrom));
 
 export const sortByPrice = (pointA, PointB) => pointA.basePrice - PointB.basePrice;
+
+export const isDatesFromEqual = (dateA, dateB) => (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'D');
+
+export const isPriceChange = (priceA, priceB) => priceA !== priceB;
+
+export const isDurationChange = (dateFromA, dateToA, dateFromB, dateToB) => {
+  const tripDurationA = dayjs.duration(dayjs(dateToA).diff(dayjs(dateFromA)));
+  const tripDurationB = dayjs.duration(dayjs(dateToB).diff(dayjs(dateFromB)));
+  return tripDurationA !== tripDurationB;
+};
