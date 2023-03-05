@@ -3,7 +3,7 @@ import {nanoid} from 'nanoid';
 import {remove, render, RENDER_POSITION} from '../utilities/render.js';
 import {USER_ACTION, UPDATE_TYPE} from '../constants.js';
 
-export default class TaskNew {
+export default class PointNew {
   constructor(pointListContainer, changeData) {
     this._pointListContainer = pointListContainer;
     this._changeData = changeData;
@@ -44,9 +44,14 @@ export default class TaskNew {
     this._changeData(
       USER_ACTION.ADD_POINT,
       UPDATE_TYPE.MINOR,
-      // Пока у нас нет сервера, который бы после сохранения
-      // выдывал честный id задачи, нам нужно позаботиться об этом самим
-      Object.assign({id: nanoid()}, point),
+      Object.assign(
+        {},
+        point,
+        {
+          id: nanoid(),
+          isNewPoint: false,
+        },
+      ),
     );
     this.destroy();
   }

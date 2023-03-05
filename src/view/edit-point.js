@@ -17,6 +17,7 @@ const BLANK_POINT = {
   basePrice: '',
   offers: null,
   information: null,
+  isNewPoint: true,
 };
 
 const createEventTypeGroupTemplate = (id, type) => (
@@ -107,7 +108,7 @@ const createDestinationDetailsTemplate = (information, type, offers) => {
 };
 
 const createEditPointTemplate = (point) => {
-  const {id, type, destination, dateFrom, dateTo, basePrice, offers, information} = point;
+  const {id, type, destination, dateFrom, dateTo, basePrice, offers, information, isNewPoint} = point;
 
   const eventTypeGroupTemplate = createEventTypeGroupTemplate(id, type);
   const destinationOptionsTemplate = createDestinationOptionsTemplate(type);
@@ -122,10 +123,10 @@ const createEditPointTemplate = (point) => {
   const isDateTo = dateTo !== null
     ? getFormattedDate(dateTo, TIME_FORMATS.FORM_TIME)
     : '';
-  const buttonName = type === '' && destination === '' && dateFrom === null && dateTo === null
+  const buttonName = isNewPoint
     ? 'Cancel'
     : 'Delete';
-  const isNeedRollupButton = type === '' && destination === '' && dateFrom === null && dateTo === null
+  const isNeedRollupButton = !isNewPoint
     ? `<button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>`

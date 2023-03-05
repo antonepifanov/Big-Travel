@@ -41,7 +41,7 @@ export default class Trip {
     this._renderTrip();
   }
 
-  createTask() {
+  createPoint() {
     this._currentSortType = SORT_TYPE.DEFAULT;
     this._filterModel.setFilter(UPDATE_TYPE.MAJOR, FILTER_TYPE.EVERYTHING);
     this._pointNewPresenter.init();
