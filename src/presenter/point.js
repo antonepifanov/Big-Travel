@@ -81,7 +81,6 @@ export default class Point {
       evt.preventDefault();
       this._editPointComponent.reset(this._point);
       this._replaceFormToCard();
-      document.removeEventListener('keydown', this._escKeyDownHandler);
     }
   }
 

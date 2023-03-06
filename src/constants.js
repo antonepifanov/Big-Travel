@@ -23,3 +23,8 @@ export const FILTER_TYPE = {
   FUTURE: 'future',
   PAST: 'past',
 };
+
+export const MENU_ITEM = {
+  TABLE: 'Table',
+  STATS: 'Stats',
+};
