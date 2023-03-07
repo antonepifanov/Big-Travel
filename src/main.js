@@ -1,5 +1,6 @@
 import {render, RENDER_POSITION} from './utilities/render.js';
 import {getRandomInteger} from './utilities/common.js';
+import StatisticsView from './view/statistics.js';
 import NavView from './view/nav.js';
 import TripPresenter from './presenter/trip.js';
 import PointsModel from './model/points.js';
@@ -47,7 +48,10 @@ const handleSiteMenuClick = (menuItem) => {
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 filterPresenter.init();
-tripPresenter.init();
+//tripPresenter.init();
+// Для удобства отладки скроем доску
+// и отобразим сразу статистику
+render(mainContent, new StatisticsView(pointsModel.getPoints()), RENDER_POSITION.BEFOREEND);
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
