@@ -1,4 +1,4 @@
-import {render, RENDER_POSITION} from './utilities/render.js';
+import {render, RENDER_POSITION, remove} from './utilities/render.js';
 import {getRandomInteger} from './utilities/common.js';
 import StatisticsView from './view/statistics.js';
 import NavView from './view/nav.js';
@@ -32,26 +32,27 @@ const handlePointNewFormClose = () => {
   document.querySelector('.trip-main__event-add-btn').removeAttribute('disabled');
 };
 
+let statisticsComponent = null;
+
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MENU_ITEM.TABLE:
       tripPresenter.init();
-      // Скрыть статистику
+      remove(statisticsComponent);
       break;
     case MENU_ITEM.STATS:
       tripPresenter.destroy();
-      // Показать статистику
+      statisticsComponent = new StatisticsView(pointsModel.getPoints());
+      render(mainContent, statisticsComponent, RENDER_POSITION.BEFOREEND);
       break;
   }
+  siteMenuComponent.setMenuItem(menuItem);
 };
 
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 filterPresenter.init();
-//tripPresenter.init();
-// Для удобства отладки скроем доску
-// и отобразим сразу статистику
-render(mainContent, new StatisticsView(pointsModel.getPoints()), RENDER_POSITION.BEFOREEND);
+tripPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();

@@ -3,8 +3,8 @@ import {MENU_ITEM} from '../constants.js';
 
 const createNavTemplate = () => (
   `<nav class="trip-controls__trip-tabs  trip-tabs">
-      <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">${MENU_ITEM.TABLE}</a>
-      <a class="trip-tabs__btn" href="#">${MENU_ITEM.STATS}</a>
+      <a class="trip-tabs__btn  trip-tabs__btn--active" href="#" data-item="${MENU_ITEM.TABLE}">${MENU_ITEM.TABLE}</a>
+      <a class="trip-tabs__btn" href="#" data-item="${MENU_ITEM.STATS}">${MENU_ITEM.STATS}</a>
    </nav>`
 );
 
@@ -30,9 +30,11 @@ export default class Nav extends AbstractView {
   }
 
   setMenuItem(menuItem) {
-    const item = this.getElement().querySelector('.trip-tabs__btn').textContent = `${menuItem}`;
+    const item = this.getElement().querySelector(`[data-item="${menuItem}"]`);
+    const currentItem = this.getElement().querySelector('.trip-tabs__btn--active');
 
     if (item !== null) {
+      currentItem.classList.remove('trip-tabs__btn--active');
       item.classList.add('trip-tabs__btn--active');
     }
   }
