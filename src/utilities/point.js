@@ -2,14 +2,6 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
-const DAYS_COUNT = 10;
-
-const TimeFormat = {
-  HOUR_PER_DAY: 1440,
-  MINUTE_PER_HOUR: 60,
-  MILLISECOND_PER_MINUTE: 60000,
-};
-
 export const compareTwoDates = (dateA, dateB) => {
   if (dateA === null || dateB === null) {
     return null;
@@ -33,17 +25,16 @@ export const getDuration = (dateFrom, dateTo) => {
 };
 
 export const humanizeDateDuration = (tripTime) => {
-  const durationDate = dayjs.duration(tripTime).$d;
+  const wholeDays = dayjs.duration(tripTime).days();
+  const wholeHours = dayjs.duration(tripTime).hours();
 
-  const day = durationDate.days < DAYS_COUNT ? `0${durationDate.days}D` : `${durationDate.days}D`;
-  const hour = durationDate.hours < DAYS_COUNT ? `0${durationDate.hours}H` : `${durationDate.hours}H`;
-  const minute = durationDate.minutes < DAYS_COUNT ? `0${durationDate.minutes}M` : `${durationDate.minutes}M`;
-  // eslint-disable-next-line no-nested-ternary
-  const total = ((tripTime / TimeFormat.MILLISECOND_PER_MINUTE) > (TimeFormat.HOUR_PER_DAY))
-    ? `${day} ${hour} ${minute}` : (tripTime / TimeFormat.MILLISECOND_PER_MINUTE) > TimeFormat.MINUTE_PER_HOUR
-      ? `${hour} ${minute}`
-      : minute;
-  return total;
+  if (wholeDays > 0) {
+    return dayjs.duration(tripTime).format('DD[D] HH[H] mm[M]');
+  } else if (wholeHours > 0) {
+    return dayjs.duration(tripTime).format('HH[H] mm[M]');
+  } else {
+    return dayjs.duration(tripTime).format('mm[M]');
+  }
 };
 
 export const getFormattedDate = (date, format) => dayjs(date).format(format);

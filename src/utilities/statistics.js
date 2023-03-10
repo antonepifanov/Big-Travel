@@ -1,40 +1,31 @@
-import { compareTwoDates } from './../utilities/point.js';
+import {compareTwoDates} from './../utilities/point.js';
 
 const FIRST_INDEX = 1;
 
-const ChartMode = {
+const CHART_MODE = {
   MONEY: 'money',
   TYPE: 'type',
   TIME: 'time',
 };
 
+export const getUniqueTypes = (points) => new Set(points.map((point) => point.type));
 
-export const getUniqueTypes = (points) => {
-  const allTypes = points.map((point) => point.type);
-  const uniqueTypes = Array.from(new Set(allTypes));
-  return uniqueTypes;
-};
-
-
-export const sortByDecreasing = (elementA, elementB) => elementB[FIRST_INDEX] - elementA[FIRST_INDEX];
-
+const sortByDecreasing = (elementA, elementB) => elementB[FIRST_INDEX] - elementA[FIRST_INDEX];
 
 export const getSortedData = (points, uniqueTypes, chartMode) => {
   const data = {};
 
   uniqueTypes.forEach((type) => data[type] = 0);
   switch (chartMode) {
-    case ChartMode.MONEY:
+    case CHART_MODE.MONEY:
       points.forEach((point) => data[point.type] += point.basePrice);
       break;
-    case ChartMode.TYPE:
+    case CHART_MODE.TYPE:
       points.forEach((point) => data[point.type]++);
       break;
-    case ChartMode.TIME:
+    case CHART_MODE.TIME:
       points.forEach((point) => data[point.type] += compareTwoDates(point.dateTo, point.dateFrom));
       break;
-    default:
-      throw new Error('Unknown chart-mode. Check ChartMode value');
   }
   const sortedData = Object.entries(data).slice().sort(sortByDecreasing);
 
@@ -45,5 +36,5 @@ export const getSortedData = (points, uniqueTypes, chartMode) => {
       previousObject.values.push(value),
     )
   );
-  return sortedData.reduce(transferToObject, { types: [], values: [] });
+  return sortedData.reduce(transferToObject, {types: [], values: []});
 };
