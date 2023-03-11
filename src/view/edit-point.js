@@ -196,7 +196,6 @@ export default class EditPoint extends SmartView {
     this._offers = this._data.offers;
     this._toggleOffersHandler = this._toggleOffersHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._toggleOffersHandler = this._toggleOffersHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._pointTypeChangeHandler = this._pointTypeChangeHandler.bind(this);

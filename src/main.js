@@ -48,6 +48,7 @@ const handlePointNewFormClose = () => {
 let statisticsComponent = null;
 
 api.getPoints().then((points) => {
+  console.log(points);
   const sorting = generateSorting(points);
   const tripPresenter = new TripPresenter(tripMain, mainContent, sorting, pointsModel, filterModel);
   const filterPresenter = new FilterPresenter(tripFilters, filterModel, pointsModel);

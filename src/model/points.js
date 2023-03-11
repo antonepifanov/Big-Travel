@@ -70,6 +70,13 @@ export default class Points extends Observer {
         dateTo: point.date_to !== null ? new Date(point.date_to) : point.date_to,
         basePrice: point.base_price !== null ? point.base_price : 0,
         isFavorite: point.is_favorite,
+        offers: point.offers.map(({title, price, isSelected}) => (
+          {
+            title,
+            price,
+            isSelected: isSelected ? isSelected : false,
+          }
+        )),
       },
     );
 
@@ -99,7 +106,6 @@ export default class Points extends Observer {
       },
     );
 
-    // Ненужные ключи мы удаляем
     delete adaptedpoint.dateFrom;
     delete adaptedpoint.dateTo;
     delete adaptedpoint.isFavorite;
