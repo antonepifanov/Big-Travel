@@ -113,4 +113,22 @@ export default class Points extends Observer {
 
     return adaptedpoint;
   }
+
+  static adaptOffersToClient(offer) {
+    const adaptedOffer = Object.assign(
+      {},
+      offer,
+      {
+        offers: offer.offers.map(({title, price, isSelected}) => (
+          {
+            title,
+            price,
+            isSelected: isSelected ? isSelected : false,
+          }
+        )),
+      },
+    );
+
+    return adaptedOffer;
+  }
 }

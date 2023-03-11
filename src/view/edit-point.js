@@ -1,12 +1,15 @@
 import {nanoid} from 'nanoid';
 import SmartView from './smart.js';
-import {generateOffers} from '../mock/generate-offers.js';
+import Api from './../api.js';
 import {generateInformation} from '../mock/generate-information.js';
 import {getFormattedDate} from '../utilities/point.js';
 import {TYPES_OF_POINT, DESTINATIONS, TIME_FORMATS} from '../mock/constants.js';
+import {AUTHORIZATION, END_POINT} from './../constants.js';
 import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const BLANK_POINT = {
   id: nanoid(4),
@@ -22,7 +25,7 @@ const BLANK_POINT = {
 
 const createEventTypeGroupTemplate = (id, type) => (
   TYPES_OF_POINT.map((typeOfPoint) => {
-    const isChecked = typeOfPoint === type
+    const isChecked = typeOfPoint.toLowerCase() === type
       ? 'checked'
       : '';
 
@@ -276,7 +279,7 @@ export default class EditPoint extends SmartView {
   }
 
   _setInnerHandlers() {
-    this.getElement().querySelector('.event__type-group').addEventListener('click', this._pointTypeChangeHandler);
+    this.getElement().querySelector('.event__type-list').addEventListener('click', this._pointTypeChangeHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._pointDestinationChangeHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
     if (this.getElement().querySelector('.event__available-offers')) {
@@ -289,9 +292,16 @@ export default class EditPoint extends SmartView {
     if (evt.target.tagName !== 'LABEL') {
       return;
     }
-    this._offers = generateOffers(evt.target.textContent);
+    api.getOffers().then((offers) => {
+      this._offers = offers.find((offer) => (
+        offer.type === evt.target.textContent.toLowerCase()
+      )).offers;
+    });
+    console.log(evt.target.textContent)
+    console.log(this._data)
+
     this.updateData({
-      type: evt.target.textContent,
+      type: evt.target.textContent.toLowerCase(),
       offers: this._offers,
     });
   }
@@ -347,11 +357,15 @@ export default class EditPoint extends SmartView {
   }
 
   _toggleOffersHandler(evt) {
-    if (!evt.target.closest('label')) {
+    if (!evt.target.closest('.event__offer-label')) {
       return;
     }
-    const targetOffer = evt.target.closest('label');
-    const index = this._offers.findIndex((offer) => offer.title === targetOffer.querySelector('.event__offer-title').textContent);
+    const targetOffer = evt.target.closest('.event__offer-label');
+    console.log(this._offers)
+    const index = this._offers.findIndex((offer) => (
+      offer.title === targetOffer.querySelector('.event__offer-title').textContent
+    ));
+    console.log(index)
     this._offers = [
       ...this._offers.slice(0, index),
       Object.assign(
@@ -365,7 +379,7 @@ export default class EditPoint extends SmartView {
     ];
     this.updateData({
       offers: this._offers,
-    });
+    }, true );
   }
 
   _dateFromChangeHandler([userDate]) {
@@ -377,7 +391,7 @@ export default class EditPoint extends SmartView {
   _dateToChangeHandler([userDate]) {
     this.updateData({
       dateTo: userDate,
-    }), true;
+    }, true);
   }
 
   static parsePointToData(point) {

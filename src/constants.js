@@ -28,3 +28,6 @@ export const MENU_ITEM = {
   TABLE: 'Table',
   STATS: 'Stats',
 };
+
+export const AUTHORIZATION = 'Basic shumilovo3671';
+export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';

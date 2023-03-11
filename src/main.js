@@ -7,10 +7,7 @@ import FilterModel from './model/filter.js';
 import FilterPresenter from './presenter/filter.js';
 import Api from './api.js';
 import {generateSorting} from './mock/generate-sorting.js';
-import {MENU_ITEM, UPDATE_TYPE, FILTER_TYPE} from './constants.js';
-
-const AUTHORIZATION = 'Basic shumilovo3671';
-const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+import {MENU_ITEM, UPDATE_TYPE, FILTER_TYPE, AUTHORIZATION, END_POINT} from './constants.js';
 
 const tripMain = document.querySelector('.trip-main');
 const mainContent = document.querySelector('.trip-events');
@@ -21,14 +18,6 @@ const siteMenuComponent = new NavView();
 const api = new Api(END_POINT, AUTHORIZATION);
 
 api.getDestinations().then((points) => {
-  console.log(points);
-  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
-  // а ещё на сервере используется snake_case, а у нас camelCase.
-  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
-  // Есть вариант получше - паттерн "Адаптер"
-});
-
-api.getOffers().then((points) => {
   console.log(points);
   // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
   // а ещё на сервере используется snake_case, а у нас camelCase.
@@ -48,7 +37,6 @@ const handlePointNewFormClose = () => {
 let statisticsComponent = null;
 
 api.getPoints().then((points) => {
-  console.log(points);
   const sorting = generateSorting(points);
   const tripPresenter = new TripPresenter(tripMain, mainContent, sorting, pointsModel, filterModel);
   const filterPresenter = new FilterPresenter(tripFilters, filterModel, pointsModel);
