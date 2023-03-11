@@ -50,10 +50,8 @@ const ChartPropertie = {
   TICK_PADDING: 5,
 };
 
-
 const renderMoneyChart = (moneyCtx, points, types) => {
   const moneyData = getSortedData(points, types, ChartMode.MONEY);
-
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: CHART_TYPE,
@@ -119,7 +117,6 @@ const renderMoneyChart = (moneyCtx, points, types) => {
     },
   });
 };
-
 
 const renderTypeChart = (typeCtx, points, types) => {
   const typeData = getSortedData(points, types, ChartMode.TYPE);
@@ -260,7 +257,6 @@ const rendetTimeChart = (timeCtx, points, types) => {
   });
 };
 
-
 const createStatisticsTemplate = () => (
   `<section class="statistics">
     <h2 class="visually-hidden">Trip statistics</h2>
@@ -279,7 +275,6 @@ const createStatisticsTemplate = () => (
   </section>`
 );
 
-
 export default class Statistics extends SmartView {
   constructor(points) {
     super();
@@ -292,11 +287,9 @@ export default class Statistics extends SmartView {
     this._setCharts();
   }
 
-
   getTemplate() {
     return createStatisticsTemplate(this._pointsData);
   }
-
 
   _resetCharts() {
     if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
@@ -306,12 +299,10 @@ export default class Statistics extends SmartView {
     }
   }
 
-
   removeElement() {
     super.removeElement();
     this._resetCharts();
   }
-
 
   _setCharts() {
     this._resetCharts();

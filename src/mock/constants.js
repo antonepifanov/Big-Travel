@@ -53,18 +53,6 @@ export const PHOTOS_RANGE = {
   MAX: 100,
 };
 
-export const DATE_GAPS = {
-  DAY_GAP: 2,
-  HOUR_GAP: 23,
-  MINUTE_GAP: 59,
-  MIN_MINUTE_GAP: 10,
-};
-
-export const MOCK_EVENTS = {
-  MIN: 15,
-  MAX:20,
-};
-
 export const TIME_FORMATS = {
   DATETIME: 'YYYY-MM-DDTHH:mm',
   EVENT_DATE: 'MMM DD',

@@ -18,7 +18,7 @@ export const getSortedData = (points, uniqueTypes, chartMode) => {
   uniqueTypes.forEach((type) => data[type] = 0);
   switch (chartMode) {
     case CHART_MODE.MONEY:
-      points.forEach((point) => data[point.type] += point.basePrice);
+      points.forEach((point) => data[point.type] +=  point.basePrice);
       break;
     case CHART_MODE.TYPE:
       points.forEach((point) => data[point.type]++);

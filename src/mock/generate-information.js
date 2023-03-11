@@ -24,8 +24,14 @@ const getPhotos = () => {
     while (photos.includes(photo)) {
       photo = `${PHOTO_URL}${getRandomInteger(PHOTOS_RANGE.MIN, PHOTOS_RANGE.MAX)}`;
     }
-    photos.push(photo);
-    return photo;
+    photos.push({
+      src: photo,
+      description: 'Image',
+    });
+    return {
+      src: photo,
+      description: 'Image',
+    };
   };
   return Array.from({length: getRandomInteger(PHOTOS_COUNT.MIN, PHOTOS_COUNT.MAX)}, getPhoto);
 };

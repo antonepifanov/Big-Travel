@@ -14,7 +14,7 @@ const BLANK_POINT = {
   destination: '',
   dateFrom: null,
   dateTo: null,
-  basePrice: '',
+  basePrice: 0,
   offers: null,
   information: null,
   isNewPoint: true,
@@ -66,8 +66,8 @@ const createOffersTemplate = (type, offers) => {
 };
 
 const createImagesTemplate = (photos) => (
-  photos.map((photo) => (
-    `<img class="event__photo" src="${photo}" alt="Event photo">`
+  photos.map(({src, description}) => (
+    `<img class="event__photo" src="${src}" alt="${description}">`
   )).join(' ')
 );
 
@@ -131,6 +131,10 @@ const createEditPointTemplate = (point) => {
         <span class="visually-hidden">Open event</span>
       </button>`
     : '';
+  const price = basePrice !== null
+    ? basePrice
+    : 0;
+
 
   return  `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -173,7 +177,7 @@ const createEditPointTemplate = (point) => {
                     <span class="visually-hidden">Price</span>
                     &euro;
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
+                  <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${price}">
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

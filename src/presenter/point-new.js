@@ -55,7 +55,7 @@ export default class PointNew {
         {},
         point,
         {
-          id: nanoid(),
+          id: nanoid(4),
           isNewPoint: false,
         },
       ),
