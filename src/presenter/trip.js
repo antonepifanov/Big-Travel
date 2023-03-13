@@ -11,7 +11,7 @@ import {SORT_TYPE, USER_ACTION, UPDATE_TYPE} from '../constants.js';
 import {filter} from '../utilities/filter.js';
 
 export default class Trip {
-  constructor(tripContainer, pointsListContainer, sorting, pointsModel, filterModel) {
+  constructor(tripContainer, pointsListContainer, sorting, pointsModel, filterModel, offers) {
     this._tripContainer = tripContainer;
     this._pointsListContainer = pointsListContainer;
     this._pointsModel = pointsModel;
@@ -19,6 +19,7 @@ export default class Trip {
     this._pointPresenter = {};
     this._sorting = sorting;
     this._currentSortType = SORT_TYPE.DAY;
+    this._offers = offers;
 
     this._sortComponent = null;
     this._tripInfoComponent = new TripInfoView();
@@ -31,7 +32,7 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._pointNewPresenter = new PointNewPresenter(this._pointsListComponent, this._handleViewAction);
+    this._pointNewPresenter = new PointNewPresenter(this._pointsListComponent, this._handleViewAction, offers);
   }
 
   init() {
@@ -138,7 +139,7 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointsListComponent, this._handleViewAction, this._handleModeChange);
+    const pointPresenter = new PointPresenter(this._pointsListComponent, this._handleViewAction, this._handleModeChange, this._offers);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }

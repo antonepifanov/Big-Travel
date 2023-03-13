@@ -17,28 +17,19 @@ const siteMenuComponent = new NavView();
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
-api.getDestinations().then((points) => {
-  console.log(points);
-  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
-  // а ещё на сервере используется snake_case, а у нас camelCase.
-  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
-  // Есть вариант получше - паттерн "Адаптер"
-});
-
 const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
 
 render(pageNav, siteMenuComponent, RENDER_POSITION.BEFOREEND);
 
-const handlePointNewFormClose = () => {
-  document.querySelector('.trip-main__event-add-btn').removeAttribute('disabled');
-};
-
 let statisticsComponent = null;
 
-api.getPoints().then((points) => {
+const getPoints = api.getPoints();
+const getOffers = api.getOffers();
+
+Promise.all([getPoints, getOffers]).then(([points, offers]) => {
   const sorting = generateSorting(points);
-  const tripPresenter = new TripPresenter(tripMain, mainContent, sorting, pointsModel, filterModel);
+  const tripPresenter = new TripPresenter(tripMain, mainContent, sorting, pointsModel, filterModel, offers);
   const filterPresenter = new FilterPresenter(tripFilters, filterModel, pointsModel);
   const handleSiteMenuClick = (menuItem) => {
     switch (menuItem) {
@@ -53,6 +44,9 @@ api.getPoints().then((points) => {
         break;
     }
     siteMenuComponent.setMenuItem(menuItem);
+  };
+  const handlePointNewFormClose = () => {
+    document.querySelector('.trip-main__event-add-btn').removeAttribute('disabled');
   };
   document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
     evt.preventDefault();

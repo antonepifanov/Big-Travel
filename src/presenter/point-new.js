@@ -3,10 +3,23 @@ import {nanoid} from 'nanoid';
 import {remove, render, RENDER_POSITION} from '../utilities/render.js';
 import {USER_ACTION, UPDATE_TYPE} from '../constants.js';
 
+const BLANK_POINT = {
+  id: nanoid(4),
+  type: '',
+  destination: '',
+  dateFrom: null,
+  dateTo: null,
+  basePrice: 0,
+  offers: null,
+  information: null,
+  isNewPoint: true,
+};
+
 export default class PointNew {
-  constructor(pointListContainer, changeData) {
+  constructor(pointListContainer, changeData, offers) {
     this._pointListContainer = pointListContainer;
     this._changeData = changeData;
+    this._offers = offers;
 
     this._pointEditComponent = null;
     this._destroyCallback = null;
@@ -23,10 +36,10 @@ export default class PointNew {
       return;
     }
 
-    this._pointEditComponent = new EditPointView();
+    this._pointEditComponent = new EditPointView(BLANK_POINT, this._offers);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
-
+    this._pointEditComponent.setFormCloseHandler(this._handleDeleteClick);
     render(this._pointListContainer, this._pointEditComponent, RENDER_POSITION.AFTERBEGIN);
 
     document.addEventListener('keydown', this._escKeyDownHandler);

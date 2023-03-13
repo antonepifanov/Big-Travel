@@ -1,30 +1,18 @@
-import {nanoid} from 'nanoid';
 import SmartView from './smart.js';
-import Api from './../api.js';
 import {generateInformation} from '../mock/generate-information.js';
 import {getFormattedDate} from '../utilities/point.js';
-import {TYPES_OF_POINT, DESTINATIONS, TIME_FORMATS} from '../mock/constants.js';
-import {AUTHORIZATION, END_POINT} from './../constants.js';
+import {DESTINATIONS, TIME_FORMATS} from '../mock/constants.js';
 import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const api = new Api(END_POINT, AUTHORIZATION);
+const createEventTypeGroupTemplate = (id, type, offersTypes) => {
+  const typesOfPoint = offersTypes.map((offersType) => (
+    `${offersType.type.charAt(0).toUpperCase()}${offersType.type.substring(1)}`
+  ));
 
-const BLANK_POINT = {
-  id: nanoid(4),
-  type: '',
-  destination: '',
-  dateFrom: null,
-  dateTo: null,
-  basePrice: 0,
-  offers: null,
-  information: null,
-  isNewPoint: true,
-};
 
-const createEventTypeGroupTemplate = (id, type) => (
-  TYPES_OF_POINT.map((typeOfPoint) => {
+  return typesOfPoint.map((typeOfPoint) => {
     const isChecked = typeOfPoint.toLowerCase() === type
       ? 'checked'
       : '';
@@ -33,8 +21,8 @@ const createEventTypeGroupTemplate = (id, type) => (
       <input id="event-type-${typeOfPoint.toLowerCase()}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeOfPoint.toLowerCase()}" ${isChecked}>
       <label class="event__type-label  event__type-label--${typeOfPoint.toLowerCase()}" for="event-type-${typeOfPoint.toLowerCase()}-${id}">${typeOfPoint}</label>
     </div>`;
-  }).join(' ')
-);
+  }).join(' ');
+};
 
 const createDestinationOptionsTemplate = () => (
   DESTINATIONS.map((destination) => (
@@ -110,10 +98,10 @@ const createDestinationDetailsTemplate = (information, type, offers) => {
     : '';
 };
 
-const createEditPointTemplate = (point) => {
+const createEditPointTemplate = (point, offersTypes) => {
   const {id, type, destination, dateFrom, dateTo, basePrice, offers, information, isNewPoint} = point;
 
-  const eventTypeGroupTemplate = createEventTypeGroupTemplate(id, type);
+  const eventTypeGroupTemplate = createEventTypeGroupTemplate(id, type, offersTypes);
   const destinationOptionsTemplate = createDestinationOptionsTemplate(type);
   const destinationDetailsTemplate = createDestinationDetailsTemplate(information, type, offers);
   const isType = type !== null ? type : '';
@@ -193,10 +181,11 @@ const createEditPointTemplate = (point) => {
 };
 
 export default class EditPoint extends SmartView {
-  constructor(point = BLANK_POINT) {
+  constructor(point, offers) {
     super();
     this._data = EditPoint.parsePointToData(point);
     this._offers = this._data.offers;
+    this._offersTypes = offers;
     this._toggleOffersHandler = this._toggleOffersHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
@@ -266,7 +255,7 @@ export default class EditPoint extends SmartView {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._data);
+    return createEditPointTemplate(this._data, this._offersTypes);
   }
 
   restoreHandlers() {
@@ -288,22 +277,17 @@ export default class EditPoint extends SmartView {
   }
 
   _pointTypeChangeHandler(evt) {
-    evt.preventDefault();
     if (evt.target.tagName !== 'LABEL') {
       return;
     }
-    api.getOffers().then((offers) => {
-      this._offers = offers.find((offer) => (
-        offer.type === evt.target.textContent.toLowerCase()
-      )).offers;
-    });
-    console.log(evt.target.textContent)
-    console.log(this._data)
-
+    this._offers = this._offersTypes.find((offer) => (
+      offer.type === evt.target.textContent.toLowerCase()
+    )).offers;
     this.updateData({
-      type: evt.target.textContent.toLowerCase(),
+      type: evt.target.textContent,
       offers: this._offers,
     });
+    this.getElement().querySelector(`.event__type-group [value=${evt.target.textContent.toLowerCase()}`).setAttribute('checked', true);
   }
 
   _pointDestinationChangeHandler(evt) {
@@ -361,11 +345,9 @@ export default class EditPoint extends SmartView {
       return;
     }
     const targetOffer = evt.target.closest('.event__offer-label');
-    console.log(this._offers)
     const index = this._offers.findIndex((offer) => (
       offer.title === targetOffer.querySelector('.event__offer-title').textContent
     ));
-    console.log(index)
     this._offers = [
       ...this._offers.slice(0, index),
       Object.assign(

@@ -70,6 +70,7 @@ export default class Points extends Observer {
         dateTo: point.date_to !== null ? new Date(point.date_to) : point.date_to,
         basePrice: point.base_price !== null ? point.base_price : 0,
         isFavorite: point.is_favorite,
+        isNewPoint: false,
         offers: point.offers.map(({title, price, isSelected}) => (
           {
             title,
@@ -110,6 +111,7 @@ export default class Points extends Observer {
     delete adaptedpoint.dateTo;
     delete adaptedpoint.isFavorite;
     delete adaptedpoint.basePrice;
+    delete adaptedpoint.isNewPoint;
 
     return adaptedpoint;
   }

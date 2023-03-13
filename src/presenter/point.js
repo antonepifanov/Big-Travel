@@ -10,13 +10,14 @@ const MODE = {
 };
 
 export default class Point {
-  constructor(pointsListContainer, changeData, changeMode) {
+  constructor(pointsListContainer, changeData, changeMode, offers) {
     this._pointsListContainer = pointsListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._pointComponent = null;
     this._editPointComponent = null;
     this._mode = MODE.DEFAULT;
+    this._offers = offers;
 
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._onRollupButtonCloseForm = this._onRollupButtonCloseForm.bind(this);
@@ -28,11 +29,10 @@ export default class Point {
 
   init(point) {
     this._point = point;
-    this._offers = this._point.offers;
     const prevPointComponent = this._pointComponent;
     const prevEditPointComponent = this._editPointComponent;
     this._pointComponent = new PointView(point);
-    this._editPointComponent = new EditPointView(point);
+    this._editPointComponent = new EditPointView(point, this._offers);
     this._editPointComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointComponent.setFormOpenHandler(this._onRollupButtonOpenForm);
