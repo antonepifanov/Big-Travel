@@ -2,6 +2,13 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
+export const TIME_FORMATS = {
+  DATETIME: 'YYYY-MM-DDTHH:mm',
+  EVENT_DATE: 'MMM DD',
+  START_TIME: 'HH:mm',
+  FORM_TIME: 'DD/MM/YY HH:mm',
+};
+
 export const compareTwoDates = (dateA, dateB) => {
   if (dateA === null || dateB === null) {
     return null;

@@ -1,6 +1,5 @@
 import AbstractView from './abstract.js';
-import {TIME_FORMATS} from '../mock/constants.js';
-import {getDuration, getFormattedDate} from '../utilities/point.js';
+import {TIME_FORMATS, getDuration, getFormattedDate} from '../utilities/point.js';
 
 const getSelectedOffers = (selectedOffers) => (
   selectedOffers.map(({title, price}) => (

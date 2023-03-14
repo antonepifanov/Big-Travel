@@ -133,4 +133,18 @@ export default class Points extends Observer {
 
     return adaptedOffer;
   }
+
+  static adaptDestinationsSetToClient(destinationsSet) {
+    const adaptedDestinationsSet = Object.assign(
+      {},
+      destinationsSet,
+      {
+        photos: destinationsSet.pictures,
+      },
+    );
+
+    delete adaptedDestinationsSet.pictures;
+
+    return adaptedDestinationsSet;
+  }
 }

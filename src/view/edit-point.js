@@ -1,7 +1,5 @@
 import SmartView from './smart.js';
-import {generateInformation} from '../mock/generate-information.js';
-import {getFormattedDate} from '../utilities/point.js';
-import {DESTINATIONS, TIME_FORMATS} from '../mock/constants.js';
+import {TIME_FORMATS, getFormattedDate} from '../utilities/point.js';
 import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -10,7 +8,6 @@ const createEventTypeGroupTemplate = (id, type, offersTypes) => {
   const typesOfPoint = offersTypes.map((offersType) => (
     `${offersType.type.charAt(0).toUpperCase()}${offersType.type.substring(1)}`
   ));
-
 
   return typesOfPoint.map((typeOfPoint) => {
     const isChecked = typeOfPoint.toLowerCase() === type
@@ -24,10 +21,12 @@ const createEventTypeGroupTemplate = (id, type, offersTypes) => {
   }).join(' ');
 };
 
-const createDestinationOptionsTemplate = () => (
-  DESTINATIONS.map((destination) => (
-    `<option value="${destination}"></option>`
-  )).join(' ')
+const createDestinationOptionsTemplate = (destinationsSet) => (
+  destinationsSet
+    .map((destinationItem) => destinationItem.name)
+    .map((destination) => (
+      `<option value="${destination}"></option>`
+    )).join(' ')
 );
 
 const createOfferTemplate = (type, offers) => (
@@ -98,11 +97,11 @@ const createDestinationDetailsTemplate = (information, type, offers) => {
     : '';
 };
 
-const createEditPointTemplate = (point, offersTypes) => {
+const createEditPointTemplate = (point, offersTypes, destinationsSet) => {
   const {id, type, destination, dateFrom, dateTo, basePrice, offers, information, isNewPoint} = point;
 
   const eventTypeGroupTemplate = createEventTypeGroupTemplate(id, type, offersTypes);
-  const destinationOptionsTemplate = createDestinationOptionsTemplate(type);
+  const destinationOptionsTemplate = createDestinationOptionsTemplate(destinationsSet);
   const destinationDetailsTemplate = createDestinationDetailsTemplate(information, type, offers);
   const isType = type !== null ? type : '';
   const isNeedIcon = type !== ''
@@ -181,11 +180,13 @@ const createEditPointTemplate = (point, offersTypes) => {
 };
 
 export default class EditPoint extends SmartView {
-  constructor(point, offers) {
+  constructor(point, offers, destinationsSet) {
     super();
     this._data = EditPoint.parsePointToData(point);
     this._offers = this._data.offers;
     this._offersTypes = offers;
+    this._destinationsSet = destinationsSet;
+
     this._toggleOffersHandler = this._toggleOffersHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
@@ -255,7 +256,7 @@ export default class EditPoint extends SmartView {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._data, this._offersTypes);
+    return createEditPointTemplate(this._data, this._offersTypes, this._destinationsSet);
   }
 
   restoreHandlers() {
@@ -294,7 +295,7 @@ export default class EditPoint extends SmartView {
     evt.preventDefault();
     this.updateData({
       destination: evt.target.value,
-      information: generateInformation(),
+      information: this._destinationsSet.find((destinationItem) => (destinationItem.name === evt.target.value)),
     });
   }
 

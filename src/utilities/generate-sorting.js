@@ -10,9 +10,9 @@ const toSortingMap = {
   Offers: (mockPoints) => mockPoints.slice().splice(),
 };
 
-export const generateSorting = (mockPoints) => (
+export const generateSorting = (points) => (
   Object.entries(toSortingMap).map(([sortingName, arrayOfPoints]) => ({
     name: sortingName,
-    pointsCount: arrayOfPoints(mockPoints).length,
+    pointsCount: arrayOfPoints(points).length,
   }))
 );

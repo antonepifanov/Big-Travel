@@ -6,7 +6,7 @@ import PointsModel from './model/points.js';
 import FilterModel from './model/filter.js';
 import FilterPresenter from './presenter/filter.js';
 import Api from './api.js';
-import {generateSorting} from './mock/generate-sorting.js';
+import {generateSorting} from './utilities/generate-sorting.js';
 import {MENU_ITEM, UPDATE_TYPE, FILTER_TYPE, AUTHORIZATION, END_POINT} from './constants.js';
 
 const tripMain = document.querySelector('.trip-main');
@@ -26,10 +26,11 @@ let statisticsComponent = null;
 
 const getPoints = api.getPoints();
 const getOffers = api.getOffers();
+const getDestinationsSet = api.getDestinationsSet();
 
-Promise.all([getPoints, getOffers]).then(([points, offers]) => {
+Promise.all([getPoints, getOffers, getDestinationsSet]).then(([points, offers, destinationsSet]) => {
   const sorting = generateSorting(points);
-  const tripPresenter = new TripPresenter(tripMain, mainContent, sorting, pointsModel, filterModel, offers);
+  const tripPresenter = new TripPresenter(tripMain, mainContent, sorting, pointsModel, filterModel, offers, destinationsSet);
   const filterPresenter = new FilterPresenter(tripFilters, filterModel, pointsModel);
   const handleSiteMenuClick = (menuItem) => {
     switch (menuItem) {
