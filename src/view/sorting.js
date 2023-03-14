@@ -1,4 +1,5 @@
 import AbstractView from './abstract.js';
+import {generateSorting} from './../utilities/generate-sorting.js';
 
 const createSortingItemsTemplate = (sorting, currentSortType) => (
   sorting.map(({name, pointsCount}) => {
@@ -25,9 +26,9 @@ const createSortingTemplate = (sorting, currentSortType) => {
 };
 
 export default class Sorting extends AbstractView{
-  constructor(sorting, currentSortType) {
+  constructor(points, currentSortType) {
     super();
-    this._sorting = sorting;
+    this._sorting = generateSorting(points);
     this._currentSortType = currentSortType;
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
