@@ -285,7 +285,7 @@ export default class EditPoint extends SmartView {
       offer.type === evt.target.textContent.toLowerCase()
     )).offers;
     this.updateData({
-      type: evt.target.textContent,
+      type: evt.target.textContent.toLowerCase(),
       offers: this._offers,
     });
     this.getElement().querySelector(`.event__type-group [value=${evt.target.textContent.toLowerCase()}`).setAttribute('checked', true);

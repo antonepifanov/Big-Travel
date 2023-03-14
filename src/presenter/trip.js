@@ -12,7 +12,7 @@ import {SORT_TYPE, USER_ACTION, UPDATE_TYPE} from '../constants.js';
 import {filter} from '../utilities/filter.js';
 
 export default class Trip {
-  constructor(tripContainer, pointsListContainer, pointsModel, filterModel, offers, destinationsSet) {
+  constructor(tripContainer, pointsListContainer, pointsModel, filterModel, offers, destinationsSet, api) {
     this._tripContainer = tripContainer;
     this._pointsListContainer = pointsListContainer;
     this._pointsModel = pointsModel;
@@ -22,6 +22,7 @@ export default class Trip {
     this._offers = offers;
     this._destinationsSet = destinationsSet;
     this._isLoading = true;
+    this._api = api;
 
     this._sortComponent = null;
     this._tripInfoComponent = new TripInfoView();
@@ -76,10 +77,14 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case USER_ACTION.UPDATE_OFFER:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case USER_ACTION.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case USER_ACTION.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);
@@ -179,7 +184,6 @@ export default class Trip {
 
   _renderLoading() {
     render(this._pointsListContainer, this._loadingComponent, RENDER_POSITION.AFTERBEGIN);
-    console.log(21)
   }
 
   _renderNoPoints() {
