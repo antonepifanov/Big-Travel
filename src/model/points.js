@@ -103,7 +103,7 @@ export default class Points extends Observer {
         'destination': {
           'description': description,
           'pictures': photos,
-          'name': point.destination,
+          'name': point.destination.toLowerCase(),
         },
       },
     );

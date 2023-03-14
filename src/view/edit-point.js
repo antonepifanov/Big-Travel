@@ -82,14 +82,14 @@ const createInformationTemplate = ({photos, description}) => {
 };
 
 const createDestinationDetailsTemplate = (information, type, offers) => {
-  const offersTemplate = offers !== null
+  const offersTemplate = offers.length
     ? createOffersTemplate(type, offers)
     : '';
-  const informationTemplate = information !== null
+  const informationTemplate = information.description !== '' && information.photos.length
     ? createInformationTemplate(information)
     : '';
 
-  return information !== null || offers !== null
+  return informationTemplate !== '' || offersTemplate !== ''
     ? `<section class="event__details">
         ${offersTemplate}
         ${informationTemplate}      
@@ -124,6 +124,9 @@ const createEditPointTemplate = (point, offersTypes, destinationsSet) => {
   const price = basePrice !== null
     ? basePrice
     : 0;
+  const isDisabled = type === '' || destination === '' || dateFrom === null || dateTo === null
+    ? 'disabled'
+    : '';
 
 
   return  `<li class="trip-events__item">
@@ -148,7 +151,7 @@ const createEditPointTemplate = (point, offersTypes, destinationsSet) => {
                   <label class="event__label  event__type-output" for="event-destination-${id}">
                     ${isType}
                   </label>
-                  <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination}" list="destination-list-${id}">
+                  <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.charAt(0).toUpperCase()}${destination.substring(1)}" list="destination-list-${id}">
                   <datalist id="destination-list-${id}">
                     ${destinationOptionsTemplate}
                   </datalist>
@@ -170,7 +173,7 @@ const createEditPointTemplate = (point, offersTypes, destinationsSet) => {
                   <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${price}">
                 </div>
 
-                <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled}>Save</button>
                 <button class="event__reset-btn" type="reset">${buttonName}</button>
                 ${isNeedRollupButton}
               </header>
@@ -368,13 +371,13 @@ export default class EditPoint extends SmartView {
   _dateFromChangeHandler([userDate]) {
     this.updateData({
       dateFrom: userDate,
-    }, true);
+    });
   }
 
   _dateToChangeHandler([userDate]) {
     this.updateData({
       dateTo: userDate,
-    }, true);
+    });
   }
 
   static parsePointToData(point) {

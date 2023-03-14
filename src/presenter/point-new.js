@@ -1,18 +1,20 @@
 import EditPointView from '../view/edit-point.js';
-import {nanoid} from 'nanoid';
 import {remove, render, RENDER_POSITION} from '../utilities/render.js';
 import {USER_ACTION, UPDATE_TYPE} from '../constants.js';
 
 const BLANK_POINT = {
-  id: nanoid(4),
   type: '',
   destination: '',
   dateFrom: null,
   dateTo: null,
   basePrice: 0,
-  offers: null,
-  information: null,
+  offers: [],
+  information: {
+    description: '',
+    photos: [],
+  },
   isNewPoint: true,
+  isFavorite: false,
 };
 
 export default class PointNew {
@@ -65,14 +67,7 @@ export default class PointNew {
     this._changeData(
       USER_ACTION.ADD_POINT,
       UPDATE_TYPE.MINOR,
-      Object.assign(
-        {},
-        point,
-        {
-          id: nanoid(4),
-          isNewPoint: false,
-        },
-      ),
+      point,
     );
     this.destroy();
   }
