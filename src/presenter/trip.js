@@ -3,7 +3,7 @@ import PointsListView from '../view/points-list.js';
 import LoadingView from '../view/loading.js';
 import SortingView from '../view/sorting.js';
 import TripCoastView from '../view/trip-coast.js';
-import PointPresenter from './point.js';
+import PointPresenter, {STATE} from './point.js';
 import PointNewPresenter from './point-new.js';
 import NoPointsView from '../view/no-points.js';
 import {render, RENDER_POSITION, remove} from '../utilities/render.js';
@@ -36,7 +36,7 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._pointNewPresenter = new PointNewPresenter(this._pointsListComponent, this._handleViewAction, offers, destinationsSet);
+    this._pointNewPresenter = new PointNewPresenter(pointsListContainer, this._pointsListComponent, this._handleViewAction, offers, destinationsSet);
   }
 
   init() {
@@ -82,21 +82,20 @@ export default class Trip {
         });
         break;
       case USER_ACTION.UPDATE_POINT:
+        this._pointPresenter[update.id].setViewState(STATE.SAVING);
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
         });
         break;
       case USER_ACTION.ADD_POINT:
+        this._pointNewPresenter.setSaving();
         this._api.addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         });
         break;
       case USER_ACTION.DELETE_POINT:
+        this._pointPresenter[update.id].setViewState(STATE.DELETING);
         this._api.deletePoint(update).then(() => {
-          // Обратите внимание, метод удаления задачи на сервере
-          // ничего не возвращает. Это и верно,
-          // ведь что можно вернуть при удалении задачи?
-          // Поэтому в модель мы всё также передаем update
           this._pointsModel.deletePoint(updateType, update);
         });
         break;
@@ -184,7 +183,6 @@ export default class Trip {
   _renderPoints() {
     const points = this._getPoints().slice();
     this._renderSorting(points);
-    render(this._pointsListContainer, this._pointsListComponent, RENDER_POSITION.BEFOREEND);
     points.forEach((point) => {
       this._renderPoint(point);
     });
@@ -211,6 +209,7 @@ export default class Trip {
 
     this._renderTripInfo();
     this._renderTripCoast();
+    render(this._pointsListContainer, this._pointsListComponent, RENDER_POSITION.BEFOREEND);
     this._renderPoints();
   }
 }

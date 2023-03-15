@@ -9,6 +9,11 @@ const MODE = {
   EDITING: 'EDITING',
 };
 
+export const STATE = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+};
+
 export default class Point {
   constructor(pointsListContainer, changeData, changeMode, offers, destinationsSet) {
     this._pointsListContainer = pointsListContainer;
@@ -48,7 +53,8 @@ export default class Point {
     }
 
     if (this._mode === MODE.EDITING) {
-      replace(this._editPointComponent, prevEditPointComponent);
+      replace(this._pointComponent, prevEditPointComponent);
+      this._mode = MODE.DEFAULT;
     }
 
     remove(prevPointComponent);
@@ -63,6 +69,24 @@ export default class Point {
   resetView() {
     if (this._mode !== MODE.DEFAULT) {
       this._replaceFormToCard();
+    }
+  }
+
+  setViewState(state) {
+    switch (state) {
+      case STATE.SAVING:
+        this._editPointComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case STATE.DELETING:
+        console.log(this._editPointComponent)
+        this._editPointComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
     }
   }
 
@@ -82,6 +106,7 @@ export default class Point {
       evt.preventDefault();
       this._editPointComponent.reset(this._point);
       this._replaceFormToCard();
+      document.removeEventListener('keydown', this._escKeyDownHandler);
     }
   }
 
@@ -94,7 +119,6 @@ export default class Point {
       USER_ACTION.UPDATE_POINT,
       isMinorUpdate ? UPDATE_TYPE.MINOR : UPDATE_TYPE.PATCH,
       update);
-    this._replaceFormToCard();
   }
 
   _handleDeleteClick(point) {
@@ -108,12 +132,12 @@ export default class Point {
   _onRollupButtonCloseForm() {
     this._editPointComponent.reset(this._point);
     this._replaceFormToCard();
+    document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
   _onRollupButtonOpenForm() {
     this._replaceCardToForm();
     document.addEventListener('keydown', this._escKeyDownHandler);
-    this._editPointComponent.setFormCloseHandler(this._onRollupButtonCloseForm);
     this._editPointComponent.setFormSubmitHandler(this._handleFormSubmit);
   }
 

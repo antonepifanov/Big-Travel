@@ -52,7 +52,7 @@ export default class Points extends Observer {
       ...this._points.slice(index + 1),
     ];
 
-    this._notify(updateType);
+    this._notify(updateType, update);
   }
 
   static adaptToClient(point) {
@@ -113,6 +113,9 @@ export default class Points extends Observer {
     delete adaptedpoint.isFavorite;
     delete adaptedpoint.basePrice;
     delete adaptedpoint.isNewPoint;
+    delete adaptedpoint.isDisabled;
+    delete adaptedpoint.isSaving;
+    delete adaptedpoint.isDeleting;
 
     return adaptedpoint;
   }

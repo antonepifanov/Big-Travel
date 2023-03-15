@@ -98,7 +98,8 @@ const createDestinationDetailsTemplate = (information, type, offers) => {
 };
 
 const createEditPointTemplate = (point, offersTypes, destinationsSet) => {
-  const {id, type, destination, dateFrom, dateTo, basePrice, offers, information, isNewPoint} = point;
+  const {id, type, destination, dateFrom, dateTo, basePrice, offers, information, isNewPoint, isDisabled, isSaving,
+    isDeleting} = point;
 
   const eventTypeGroupTemplate = createEventTypeGroupTemplate(id, type, offersTypes);
   const destinationOptionsTemplate = createDestinationOptionsTemplate(destinationsSet);
@@ -113,9 +114,10 @@ const createEditPointTemplate = (point, offersTypes, destinationsSet) => {
   const isDateTo = dateTo !== null
     ? getFormattedDate(dateTo, TIME_FORMATS.FORM_TIME)
     : '';
+  const isDeletingProcess =  isDeleting ? 'Deleting...' : 'Delete';
   const buttonName = isNewPoint
     ? 'Cancel'
-    : 'Delete';
+    : isDeletingProcess;
   const isNeedRollupButton = !isNewPoint
     ? `<button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
@@ -124,9 +126,7 @@ const createEditPointTemplate = (point, offersTypes, destinationsSet) => {
   const price = basePrice !== null
     ? basePrice
     : 0;
-  const isDisabled = type === '' || destination === '' || dateFrom === null || dateTo === null
-    ? 'disabled'
-    : '';
+  const isSubmitDisabled = type === '' || destination === '' || dateFrom === null || dateTo === null;
 
 
   return  `<li class="trip-events__item">
@@ -173,7 +173,7 @@ const createEditPointTemplate = (point, offersTypes, destinationsSet) => {
                   <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${price}">
                 </div>
 
-                <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled}>Save</button>
+                <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled || isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
                 <button class="event__reset-btn" type="reset">${buttonName}</button>
                 ${isNeedRollupButton}
               </header>
@@ -335,10 +335,6 @@ export default class EditPoint extends SmartView {
 
   setFormCloseHandler(callback) {
     this._callback.formClose = callback;
-    if (this.getElement().querySelector('.event__reset-btn')) {
-      this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formCloseHandler);
-    }
-
     if (this.getElement().querySelector('.event__rollup-btn')) {
       this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formCloseHandler);
     }

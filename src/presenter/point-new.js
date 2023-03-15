@@ -18,8 +18,9 @@ const BLANK_POINT = {
 };
 
 export default class PointNew {
-  constructor(pointListContainer, changeData, offers, destinationsSet) {
-    this._pointListContainer = pointListContainer;
+  constructor(pointsListContainer, pointListComponent, changeData, offers, destinationsSet) {
+    this._pointsListContainer = pointsListContainer;
+    this._pointListComponent = pointListComponent;
     this._changeData = changeData;
     this._offers = offers;
     this._destinationsSet = destinationsSet;
@@ -43,7 +44,8 @@ export default class PointNew {
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._pointEditComponent.setFormCloseHandler(this._handleDeleteClick);
-    render(this._pointListContainer, this._pointEditComponent, RENDER_POSITION.AFTERBEGIN);
+    render(this._pointsListContainer, this._pointListComponent, RENDER_POSITION.AFTERBEGIN);
+    render(this._pointListComponent, this._pointEditComponent, RENDER_POSITION.AFTERBEGIN);
 
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
@@ -63,13 +65,19 @@ export default class PointNew {
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
+  setSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
   _handleFormSubmit(point) {
     this._changeData(
       USER_ACTION.ADD_POINT,
       UPDATE_TYPE.MINOR,
       point,
     );
-    this.destroy();
   }
 
   _handleDeleteClick() {
