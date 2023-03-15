@@ -81,7 +81,6 @@ export default class Point {
         });
         break;
       case STATE.DELETING:
-        console.log(this._editPointComponent)
         this._editPointComponent.updateData({
           isDisabled: true,
           isDeleting: true,
@@ -138,6 +137,7 @@ export default class Point {
   _onRollupButtonOpenForm() {
     this._replaceCardToForm();
     document.addEventListener('keydown', this._escKeyDownHandler);
+    this._editPointComponent.setFormCloseHandler(this._onRollupButtonCloseForm);
     this._editPointComponent.setFormSubmitHandler(this._handleFormSubmit);
   }
 
