@@ -9,20 +9,21 @@ import FilterPresenter from './presenter/filter.js';
 import Api from './api.js';
 import {MENU_ITEM, UPDATE_TYPE, FILTER_TYPE, AUTHORIZATION, END_POINT} from './constants.js';
 
+const mainContent = document.querySelector('.trip-events');
 const loadingComponent = new LoadingView();
+
+render(mainContent, loadingComponent, RENDER_POSITION.BEFOREEND);
+
 const siteMenuComponent = new NavView();
 const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
 const api = new Api(END_POINT, AUTHORIZATION);
 const tripMain = document.querySelector('.trip-main');
-const mainContent = document.querySelector('.trip-events');
 const pageNav = tripMain.querySelector('.trip-controls__navigation');
 const tripFilters = tripMain.querySelector('.trip-controls__filters');
 const getOffers = api.getOffers();
 const getDestinationsSet = api.getDestinationsSet();
 let statisticsComponent = null;
-
-render(mainContent, loadingComponent, RENDER_POSITION.BEFOREEND);
 
 Promise.all([getOffers, getDestinationsSet])
   .then(([offers, destinationsSet]) => {

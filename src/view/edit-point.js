@@ -174,7 +174,7 @@ const createEditPointTemplate = (point, offersTypes, destinationsSet) => {
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled || isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-                <button class="event__reset-btn" type="reset">${buttonName}</button>
+                <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${buttonName}</button>
                 ${isNeedRollupButton}
               </header>
               ${destinationDetailsTemplate}    

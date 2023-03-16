@@ -77,27 +77,43 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case USER_ACTION.UPDATE_OFFER:
-        this._api.updatePoint(update).then((response) => {
-          this._pointsModel.updatePoint(updateType, response);
-        });
+        this._api.updatePoint(update)
+          .then((response) => {
+            this._pointsModel.updatePoint(updateType, response);
+          })
+          .catch(() => {
+            this._pointPresenter[update.id].setViewState(STATE.ABORTING);
+          });
         break;
       case USER_ACTION.UPDATE_POINT:
         this._pointPresenter[update.id].setViewState(STATE.SAVING);
-        this._api.updatePoint(update).then((response) => {
-          this._pointsModel.updatePoint(updateType, response);
-        });
+        this._api.updatePoint(update)
+          .then((response) => {
+            this._pointsModel.updatePoint(updateType, response);
+          })
+          .catch(() => {
+            this._pointPresenter[update.id].setViewState(STATE.ABORTING);
+          });
         break;
       case USER_ACTION.ADD_POINT:
         this._pointNewPresenter.setSaving();
-        this._api.addPoint(update).then((response) => {
-          this._pointsModel.addPoint(updateType, response);
-        });
+        this._api.addPoint(update)
+          .then((response) => {
+            this._pointsModel.addPoint(updateType, response);
+          })
+          .catch(() => {
+            this._pointNewPresenter.setAborting();
+          });
         break;
       case USER_ACTION.DELETE_POINT:
         this._pointPresenter[update.id].setViewState(STATE.DELETING);
-        this._api.deletePoint(update).then(() => {
-          this._pointsModel.deletePoint(updateType, update);
-        });
+        this._api.deletePoint(update)
+          .then(() => {
+            this._pointsModel.deletePoint(updateType, update);
+          })
+          .catch(() => {
+            this._pointPresenter[update.id].setViewState(STATE.ABORTING);
+          });
         break;
     }
   }
