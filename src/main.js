@@ -52,6 +52,7 @@ Promise.all([getOffers, getDestinationsSet])
     document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
       evt.preventDefault();
       tripPresenter.destroy();
+      remove(statisticsComponent);
       filterModel.setFilter(UPDATE_TYPE.MAJOR, FILTER_TYPE.EVERYTHING);
       tripPresenter.init();
       tripPresenter.createPoint(handlePointNewFormClose);
