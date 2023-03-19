@@ -1,8 +1,6 @@
-import TripInfoView from '../view/trip-info.js';
 import PointsListView from '../view/points-list.js';
 import LoadingView from '../view/loading.js';
 import SortingView from '../view/sorting.js';
-import TripCoastView from '../view/trip-coast.js';
 import PointPresenter, {STATE} from './point.js';
 import PointNewPresenter from './point-new.js';
 import NoPointsView from '../view/no-points.js';
@@ -25,9 +23,7 @@ export default class Trip {
     this._api = api;
 
     this._sortComponent = null;
-    this._tripInfoComponent = new TripInfoView();
     this._pointsListComponent = new PointsListView();
-    this._tripCoastComponent = new TripCoastView();
     this._noPointsComponent = new NoPointsView();
     this._loadingComponent = new LoadingView();
 
@@ -155,14 +151,6 @@ export default class Trip {
     this._renderPoints();
   }
 
-  _renderTripInfo() {
-    render(this._tripContainer, this._tripInfoComponent, RENDER_POSITION.AFTERBEGIN);
-  }
-
-  _renderTripCoast() {
-    render(this._tripInfoComponent, this._tripCoastComponent, RENDER_POSITION.BEFOREEND);
-  }
-
   _renderSorting(points) {
     if (this._sortComponent !== null) {
       this._sortComponent = null;
@@ -223,8 +211,6 @@ export default class Trip {
       return;
     }
 
-    this._renderTripInfo();
-    this._renderTripCoast();
     render(this._pointsListContainer, this._pointsListComponent, RENDER_POSITION.BEFOREEND);
     this._renderPoints();
   }
