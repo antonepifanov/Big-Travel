@@ -52573,7 +52573,7 @@
   };
   
   const AUTHORIZATION = 'Basic shumilovo3671';
-  const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+  const END_POINT = 'https://14.ecmascript.htmlacademy.pro/big-trip';
   
   
   /***/ }),
