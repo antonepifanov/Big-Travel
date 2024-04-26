@@ -31,4 +31,4 @@ export const MENU_ITEM = {
 };
 
 export const AUTHORIZATION = 'Basic shumilovo3671';
-export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+export const END_POINT = 'https://14.ecmascript.htmlacademy.pro/big-trip';
